@@ -32,12 +32,12 @@
 		computed: {
 			setPosition() {
 				let random = Math.floor(Math.random() * (80 - 10) + 10);
-				console.log("random:", random);
+				//console.log("random:", random);
 				return random + "%";
 			},
 			shine() {
 				let _shine = Math.floor(Math.random() * (100 - 1) + 1);
-				console.log(_shine);
+				//console.log(_shine);
 				return _shine;
 			}
 		},
@@ -60,8 +60,8 @@
 		/* animation-play-state: paused; */
 	}
 	.big{
-		width: 150upx;
-		height: 150upx;
+		width: 115upx;
+		height: 115upx;
 	}
 
 	.shine:before {

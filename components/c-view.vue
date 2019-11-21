@@ -1,7 +1,7 @@
 <template>
 	<cover-view :class="['coverView',shine>50?'shine big':'']" :style="{'left':setPosition}">
 		<view class="cover-block">
-			<img :src="bubble" class="bubble" />
+			<!-- <img :src="bubble" class="bubble" /> -->
 			<view class="cover-name">
 				{{list.name}}
 			</view>
@@ -19,9 +19,9 @@
 					return {}
 				}
 			},
-			bubble:{
-				type:String,
-				default:""
+			bubble: {
+				type: String,
+				default: ""
 			}
 		},
 		data() {
@@ -59,7 +59,8 @@
 		animation-fill-mode: forwards;
 		/* animation-play-state: paused; */
 	}
-	.big{
+
+	.big {
 		width: 115upx;
 		height: 115upx;
 	}
@@ -139,7 +140,7 @@
 	}
 
 	.cover-name {
-		color: #CCCCCC;
+		color: #030DFF;
 		z-index: 2;
 		font-size: 28upx;
 		position: absolute;
@@ -152,6 +153,28 @@
 		flex-direction: row;
 		align-content: center;
 		align-items: center;
+
+		animation-name: flash;
+		animation-duration: 1.5s;
+		animation-timing-function: ease-in-out;
+		animation-iteration-count: infinite;
+		animation-direction: alternate;
+	}
+
+	@keyframes flash {
+		from {
+			text-shadow: 0 0 10px #fff,
+				0 0 20px #fff,
+				0 0 40px #228DFF;
+		}
+
+		to {
+			text-shadow: 0 0 5px #fff,
+				0 0 10px #fff,
+				0 0 15px #fff,
+				0 0 20px #228DFF,
+				0 0 35px #030DFF;
+		}
 	}
 
 	.bubble {

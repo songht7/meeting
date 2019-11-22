@@ -140,7 +140,7 @@
 	}
 
 	.cover-name {
-		color: #030DFF;
+		color: #FFF;
 		z-index: 2;
 		font-size: 28upx;
 		position: absolute;
@@ -164,16 +164,24 @@
 	@keyframes flash {
 		from {
 			text-shadow: 0 0 10px #fff,
-				0 0 20px #fff,
-				0 0 40px #228DFF;
+               0 0 20px  #fff,
+               0 0 30px  #fff,
+               0 0 40px  #228DFF,
+               0 0 70px  #228DFF,
+               0 0 80px  #228DFF,
+               0 0 100px #228DFF,
+               0 0 150px #228DFF;
 		}
 
 		to {
-			text-shadow: 0 0 5px #fff,
-				0 0 10px #fff,
-				0 0 15px #fff,
-				0 0 20px #228DFF,
-				0 0 35px #030DFF;
+			text-shadow:  0 0 5px #fff,
+               0 0 10px #fff,
+               0 0 15px #fff,
+               0 0 20px #228DFF,
+               0 0 35px #228DFF,
+               0 0 40px #228DFF,
+               0 0 50px #228DFF,
+               0 0 75px #228DFF;
 		}
 	}
 

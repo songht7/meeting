@@ -11,6 +11,17 @@
 					}
 				}
 			}
+		}, {
+			"path": "pages/screen/index",
+			"style": {
+				"navigationBarTitleText": "HELLO",
+				"navigationStyle": "custom",
+				"app-plus": {
+					"titleNView": {
+						"type": "transparent"
+					}
+				}
+			}
 		}
 	],
 	"globalStyle": {

@@ -14,7 +14,8 @@ const store = new Vuex.Store({
 		user: {},
 		data: {},
 		interface: common.Interface,
-		systemInfo: {}
+		systemInfo: {},
+		socketOpen: false
 	},
 	mutations: {
 		setSystemInfo(state, data) {
@@ -58,6 +59,52 @@ const store = new Vuex.Store({
 				}
 			})
 		},
+		connectSocket(ctx) {
+			let _url = ctx.state.interface.wsUrl;
+			console.log("connectSocket-url：", _url)
+			var result = [];
+			uni.connectSocket({
+				url: _url,
+				data() {
+					return {};
+				},
+				header: {
+					'content-type': 'application/json'
+				},
+				method: 'GET',
+				success(res) {
+					console.log("connectSocket-success：", res)
+					result = res;
+					ctx.state.socketOpen = true;
+				},
+				fail(err) {
+					console.log("connectSocket-fail：", err)
+					result = {
+						"success": false,
+						"msg": "connectSocket-fail",
+						"err": err
+					}
+				}
+			});
+		},
+		onSocketMessage(ctx, parm) {
+			console.log(parm)
+			uni.onSocketMessage(function(res) {
+				console.log('收到服务器内容：' + res);
+				if (parm.fun) {
+					new parm.fun(res)
+				}
+			});
+		},
+		sendSocketMessage(ctx, pram) {
+			if(ctx.state.socketOpen){
+				uni.sendSocketMessage({
+					data: pram.msg
+				});
+			}else{
+				console.log("服务器链接异常")
+			}
+		},
 		getSystemInfo(ctx) {
 			var systemInfo = {}
 			uni.getSystemInfo({
@@ -71,7 +118,6 @@ const store = new Vuex.Store({
 			});
 		}
 	},
-	modules: {
-	}
+	modules: {}
 })
 export default store

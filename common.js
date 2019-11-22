@@ -6,25 +6,23 @@
 
 var api = {
 	"formal": {
-		"interface": "https://api.bdmartech.com", //接口
-		"domain": "http://m.bdmartech.com",
+		"wsUrl": "ws://socket.wsshanghai.com:12345", //服务器地址 
+		"ajUrl": "//socket.wsshanghai.com", //服务器地址 开关
 		"appName": "年会"
 	},
 	"dev": {
-		"interface": "https://api-test.wsshanghai.com", //接口
-		"domain": "http://train.wsshanghai.com",
+		"wsUrl": "ws://socket.wsshanghai.com:12345", //服务器地址
+		"ajUrl": "//socket.wsshanghai.com", //服务器地址 开关
 		"appName": "年会"
 	}
 }
-var lks = "wuxi";
+var lks = "dev";
 export default {
 	Interface: {
 		"site": lks,
-		"apiurl": api[lks]["interface"], //space111111
-		"domain": api[lks]["domain"]
-		"addr": {
-			"slideShow": "/v2/ApiHome-slideShow.htm", //首页列表
-			"checkSystem": "/v4/ApiBase-checkSystem.htm", //检测机遇是否开启
-		}
+		"wsUrl": api[lks]["wsUrl"],
+		"ajUrl": api[lks]["ajUrl"],
+		"appName": api[lks]["appName"],
+		"addr": {}
 	}
 }

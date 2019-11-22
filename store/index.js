@@ -96,12 +96,15 @@ const store = new Vuex.Store({
 				}
 			});
 		},
-		sendSocketMessage(ctx, pram) {
-			if(ctx.state.socketOpen){
+		sendSocketMessage(ctx, parm) {
+			if (ctx.state.socketOpen) {
+				if (parm.fun) {
+					new parm.fun()
+				}
 				uni.sendSocketMessage({
-					data: pram.msg
+					data: parm.msg
 				});
-			}else{
+			} else {
 				console.log("服务器链接异常")
 			}
 		},

@@ -2,8 +2,11 @@
 	<view class="user-box">
 		<view class="send-box">
 			<input class="sign" type="text" v-model="name" />
-			<view class="sendMsg" @click="sendSocketMessage">
+			<view class="sendMsg" @click="sendSocketMessage('')">
 				签到
+			</view>
+			<view class="sendMsg" @click="sendSocketMessage('space_close')">
+				关闭
 			</view>
 		</view>
 		<view class="user-bubble" v-if="up" :style="{'animation-play-state':paused}">
@@ -24,17 +27,28 @@
 		onLoad() {
 			this.$store.dispatch("connectSocket")
 		},
-		onShow() {},
-		onHide() {},
+		onShow() {
+			uni.onSocketOpen(function(res) {
+				console.log('WebSocket连接已打开！');
+			});
+		},
+		onHide() {
+			this.sendSocketMessage('space_close')
+		},
+		onUnload() {
+			this.sendSocketMessage('space_close')
+		},
 		components: {},
 		computed: {},
 		methods: {
-			sendSocketMessage() {
+			sendSocketMessage(val) {
 				var that = this;
 				that.up = true;
 				that.paused = "running";
+				var _msg = val || that.name;
+				console.log(_msg)
 				let _data = {
-					"msg": that.name
+					"msg": _msg
 				};
 				_data["fun"] = function() {
 					setTimeout(() => {
@@ -98,7 +112,7 @@
 		animation-name: fadeUpOut;
 		animation-duration: 3s;
 		animation-timing-function: linear;
-		animation-iteration-count:infinite;
+		animation-iteration-count: infinite;
 		animation-fill-mode: none;
 		/* forwards; */
 	}

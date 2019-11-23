@@ -108,6 +108,18 @@ const store = new Vuex.Store({
 				console.log("服务器链接异常")
 			}
 		},
+		closeSocket(ctx) {
+			uni.closeSocket({
+				code: 1000,
+				reason: "关闭",
+				success(res) {
+					console.log("closeSocket-success:", res)
+				},
+				fail(err) {
+					console.log("closeSocket-fail:", err)
+				}
+			});
+		},
 		getSystemInfo(ctx) {
 			var systemInfo = {}
 			uni.getSystemInfo({

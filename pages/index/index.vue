@@ -5,9 +5,9 @@
 			<view class="sendMsg" @click="sendSocketMessage('')">
 				签到
 			</view>
-			<view class="sendMsg" @click="sendSocketMessage('space_close')">
+			<!-- <view class="sendMsg" @click="sendSocketMessage('space_close')">
 				关闭
-			</view>
+			</view> -->
 		</view>
 		<view class="user-bubble" v-if="up" :style="{'animation-play-state':paused}">
 			<view class="uname">{{name}}</view>

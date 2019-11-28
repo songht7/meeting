@@ -24,10 +24,11 @@
 				paused: "paused"
 			}
 		},
-		onLoad() {
+		onLoad() {},
+		onShow() {
 			this.$store.dispatch("connectSocket")
 		},
-		onShow() {
+		onReady() {
 			uni.onSocketOpen(function(res) {
 				console.log('WebSocket连接已打开！');
 			});

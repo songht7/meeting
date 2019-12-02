@@ -33,7 +33,19 @@
 					</view>
 				</block>
 				<block v-else>
-					
+					<view class="circleProgress_wrapper">
+						<view class="wrapper right">
+							<view class="circleProgress rightcircle">
+
+							</view>
+						</view>
+
+						<view class="wrapper left">
+							<view class="circleProgress leftcircle">
+
+							</view>
+						</view>
+					</view>
 				</block>
 			</view>
 		</view>
@@ -101,6 +113,7 @@
 </script>
 
 <style>
+    @import '/common/progress.css';
 	page {
 		height: 100%;
 		width: 100%;

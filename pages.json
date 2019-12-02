@@ -3,7 +3,7 @@
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "HELLO",
+				"navigationBarTitleText": "恒洁-签到",
 				"navigationStyle": "custom",
 				"app-plus": {
 					"titleNView": {

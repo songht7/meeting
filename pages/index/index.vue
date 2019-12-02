@@ -1,16 +1,36 @@
 <template>
 	<view class="user-box">
-		<view class="send-box">
-			<input class="sign" type="text" v-model="name" />
-			<view class="sendMsg" @click="sendSocketMessage('')">
-				签到
+		<view class="sign-main">
+			<view class="send-box">
+				<img src="../../static/logo.png" id="Logo" alt="">
+				<view class="user-bubble" v-if="up" :style="{'animation-play-state':paused}">
+					<view class="uname">{{name}}</view>
+				</view>
+				<view class="sigin-form">
+					<view class="sigin-block">
+						<block v-if="siginSucc">
+							<view class="sigin-info sigin-info-succ">
+								<text>欢迎您参加</text><br />
+								<text>恒洁2020年度经销商大会</text>
+							</view>
+						</block>
+						<block v-else>
+							<view class="sign-ipt">
+								<view class="sigin-info">
+									输入您的姓名
+								</view>
+								<input class="sign" type="text" v-model="name" />
+								<view class="sendMsg" @click="sendSocketMessage('')">
+									点击签到
+								</view>
+								<!-- <view class="sendMsg" @click="sendSocketMessage('space_close')">
+								关闭
+							</view> -->
+							</view>
+						</block>
+					</view>
+				</view>
 			</view>
-			<!-- <view class="sendMsg" @click="sendSocketMessage('space_close')">
-				关闭
-			</view> -->
-		</view>
-		<view class="user-bubble" v-if="up" :style="{'animation-play-state':paused}">
-			<view class="uname">{{name}}</view>
 		</view>
 	</view>
 </template>
@@ -21,7 +41,8 @@
 			return {
 				name: "",
 				up: false,
-				paused: "paused"
+				paused: "paused",
+				siginSucc: false
 			}
 		},
 		onLoad() {},
@@ -44,16 +65,18 @@
 		methods: {
 			sendSocketMessage(val) {
 				var that = this;
-				that.up = true;
-				that.paused = "running";
 				var _msg = val || that.name;
 				console.log(_msg)
 				let _data = {
 					"msg": _msg
 				};
 				_data["fun"] = function() {
+					that.up = true;
+					that.siginSucc = true;
+					that.paused = "running";
 					setTimeout(() => {
 						that.up = false;
+						//that.siginSucc = false;
 						that.paused = "paused";
 					}, 3000)
 				}
@@ -68,46 +91,84 @@
 	page {
 		height: 100%;
 		width: 100%;
-		background: #000;
 	}
 
 	.user-box {
+		background: url(../../static/bg.jpg) 50% 50% no-repeat #193977;
+		background-size: cover;
 		position: relative;
-		padding: 20upx;
 		height: 100%;
+	}
+
+	.sign-main {
+		padding: 20upx;
+		height: 90%;
+	}
+
+	#Logo {
+		width: 70%;
+		display: block;
+		margin: 50upx auto 25upx;
 	}
 
 	.send-box {
 		z-index: 3;
+		height: 100%;
+	}
+
+	.sigin-form {
+		background: url(../../static/water.png) 50% 50% no-repeat;
+		background-size: contain;
+		height: 90%;
+	}
+
+	.sigin-block {
+		width: 80%;
+		padding: 550upx 10% 0;
+	}
+
+	.sigin-info {
+		text-align: center;
+		color: #173171;
+		font-size: 38upx;
+	}
+
+	.sigin-info-succ {
+		font-size: 42upx;
+		padding-top: 50upx;
+	}
+
+	.sign-ipt {
+		width: 70%;
+		padding: 0 15%;
+	}
+
+	.sign {
+		background: #FFFFFF;
+		line-height: 1.4;
+		font-size: 38upx;
+		border: 1upx solid #CCCCCC;
+		padding: 5upx 10upx;
+		color: #173171;
 	}
 
 	.sendMsg {
 		font-size: 32upx;
-		background: #007AFF;
+		background: #1E3070;
 		color: #FFFFFF;
 		display: flex;
 		justify-content: center;
 		align-content: center;
 		align-items: center;
-		line-height: 2;
-		padding: 10upx;
-		border-radius: 10upx;
+		line-height: 1.4;
+		padding: 15upx;
 		margin: 10upx auto;
-	}
-
-	.sign {
-		background: #FFFFFF;
-		line-height: 2;
-		font-size: 48upx;
-		border: 2upx solid #CCCCCC;
-		padding: 10upx 20upx;
-		border-radius: 25upx;
 	}
 
 	.user-bubble {
 		position: absolute;
 		width: 100%;
-		bottom: 50%;
+		bottom: 10%;
 		opacity: 0;
 		z-index: 1;
 		animation-name: fadeUpOut;
@@ -143,7 +204,7 @@
 	}
 
 	.uname {
-		color: #FFF;
+		color: #DB9824;
 		font-size: 50upx;
 		line-height: 1;
 		display: flex;
@@ -161,25 +222,17 @@
 
 	@keyframes flash {
 		from {
-			text-shadow: 0 0 10px #fff,
-				0 0 20px #fff,
-				0 0 30px #fff,
-				0 0 40px #228DFF,
-				0 0 70px #228DFF,
-				0 0 80px #228DFF,
-				0 0 100px #228DFF,
-				0 0 150px #228DFF;
+			text-shadow: 0 0 5px #CBB281,
+				0 0 10px #CBB281,
+				0 0 35px #DB9824,
+				0 0 40px #DB9824;
 		}
 
 		to {
-			text-shadow: 0 0 5px #fff,
-				0 0 10px #fff,
-				0 0 15px #fff,
-				0 0 20px #228DFF,
-				0 0 35px #228DFF,
-				0 0 40px #228DFF,
-				0 0 50px #228DFF,
-				0 0 75px #228DFF;
+			text-shadow: 0 0 10px #CBB281,
+				0 0 20px #CBB281,
+				0 0 40px #DB9824,
+				0 0 70px #DB9824;
 		}
 	}
 </style>

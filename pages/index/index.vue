@@ -113,7 +113,7 @@
 </script>
 
 <style>
-    @import '/common/progress.css';
+    @import '../../common/progress.css';
 	page {
 		height: 100%;
 		width: 100%;

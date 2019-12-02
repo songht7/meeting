@@ -3,49 +3,62 @@
 		<view class="sign-main">
 			<view class="send-box">
 				<img src="../../static/logo.png" id="Logo" alt="">
-				<view class="user-bubble" v-if="up" :style="{'animation-play-state':paused}">
-					<view class="uname">{{name}}</view>
-				</view>
-				<view class="sigin-form">
-					<view class="sigin-block">
-						<block v-if="siginSucc">
-							<view class="sigin-info sigin-info-succ">
-								<text>欢迎您参加</text><br />
-								<text>恒洁2020年度经销商大会</text>
-							</view>
-						</block>
-						<block v-else>
-							<view class="sign-ipt">
-								<view class="sigin-info">
-									输入您的姓名
+				<block v-if="userSign=='Sign'">
+					<view class="user-bubble" v-if="up" :style="{'animation-play-state':paused}">
+						<view class="uname">{{name}}</view>
+					</view>
+					<view class="sigin-form">
+						<view class="sigin-block">
+							<block v-if="siginSucc">
+								<view class="sigin-info sigin-info-succ">
+									<text>欢迎您参加</text><br />
+									<text>恒洁2020年度经销商大会</text>
 								</view>
-								<input class="sign" type="text" v-model="name" />
-								<view class="sendMsg" @click="sendSocketMessage('')">
-									点击签到
-								</view>
-								<!-- <view class="sendMsg" @click="sendSocketMessage('space_close')">
+							</block>
+							<block v-else>x
+								<view class="sign-ipt">
+									<view class="sigin-info">
+										输入您的姓名
+									</view>
+									<input class="sign" type="text" v-model="name" />
+									<view class="sendMsg" @click="sendSocketMessage('')">
+										点击签到
+									</view>
+									<!-- <view class="sendMsg" @click="sendSocketMessage('space_close')">
 								关闭
 							</view> -->
-							</view>
-						</block>
+								</view>
+							</block>
+						</view>
 					</view>
-				</view>
+				</block>
+				<block v-else>
+					
+				</block>
 			</view>
 		</view>
 	</view>
 </template>
 
 <script>
+	import Shake from 'shake.js'
 	export default {
 		data() {
 			return {
 				name: "",
 				up: false,
 				paused: "paused",
-				siginSucc: false
+				siginSucc: false,
+				userSign: "Sign"
 			}
 		},
-		onLoad() {},
+		onLoad(option) {
+			var that = this;
+			let sign = option.sign;
+			if (sign == 'shake') {
+				that.userSign = sign;
+			}
+		},
 		onShow() {
 			this.$store.dispatch("connectSocket")
 		},

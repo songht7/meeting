@@ -3,7 +3,7 @@
 		<view class="sign-main">
 			<view class="send-box">
 				<img src="../../static/logo.png" id="Logo" alt="">
-				<block v-if="signType=='Sign'">
+				<block v-if="signType=='sign'">
 					<view class="sigin-form">
 						<view class="sigin-block" :style="{'padding-top':siginBlockTop+'%'}">
 							<block v-if="siginSucc">
@@ -69,7 +69,7 @@
 				up: false,
 				paused: "paused",
 				siginSucc: false,
-				signType: "Sign",
+				signType: "sign",//sign：签到,assist：助力
 				proImg: 1,
 				proSize: 7,
 				rotateRight: -135,
@@ -79,8 +79,15 @@
 		onLoad(option) {
 			var that = this;
 			let sign = option.sign;
-			if (sign == 'shake') {
+			if (sign == 'assist') {
 				that.signType = sign;
+				uni.setNavigationBarTitle({
+				    title: '新品助力'
+				});
+			}else{
+				uni.setNavigationBarTitle({
+				    title: '恒洁-签到'
+				});
 			}
 		},
 		onShow() {
@@ -96,7 +103,7 @@
 				that.siginBlockTop = 65;
 			}
 			console.log(systemInfo)
-			if (signType == 'shake') {
+			if (signType == 'assist') {
 				let myShake = new Shake({
 					threshold: 10, // 默认摇动阈值
 					timeout: 1000 // 默认两次事件间隔时间

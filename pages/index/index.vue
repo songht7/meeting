@@ -1,21 +1,18 @@
 <template>
-	<view class="user-box">
+	<view class="user-box" :style="{'height':screenHeight+'px'}">
 		<view class="sign-main">
 			<view class="send-box">
 				<img src="../../static/logo.png" id="Logo" alt="">
-				<view class="user-bubble" v-if="up" :style="{'animation-play-state':paused}">
-					<view class="uname">{{name}}</view>
-				</view>
 				<block v-if="signType=='Sign'">
 					<view class="sigin-form">
-						<view class="sigin-block">
+						<view class="sigin-block" :style="{'padding-top':siginBlockTop+'%'}">
 							<block v-if="siginSucc">
 								<view class="sigin-info sigin-info-succ">
 									<text>欢迎您参加</text><br />
 									<text>恒洁2020年度经销商大会</text>
 								</view>
 							</block>
-							<block v-else>x
+							<block v-else>
 								<view class="sign-ipt">
 									<view class="sigin-info">
 										输入您的姓名
@@ -49,10 +46,13 @@
 					<view class="shake-info" @click="shakeEventDidOccur">
 						<img src="../../static/shake.png" class="shake-img" alt="">
 						<view class="shake-ovs">
-							连续摇晃手机，助力新品发布
+							摇一摇，助力新品发布
 						</view>
 					</view>
 				</block>
+				<view class="user-bubble" v-if="up" :style="{'animation-play-state':paused}">
+					<view class="uname">{{name}}</view>
+				</view>
 			</view>
 		</view>
 	</view>
@@ -63,6 +63,8 @@
 	export default {
 		data() {
 			return {
+				siginBlockTop: 68,
+				screenHeight: "",
 				name: "",
 				up: false,
 				paused: "paused",
@@ -84,15 +86,25 @@
 		onShow() {
 			var that = this;
 			var signType = that.signType;
-			if (signType == 'shake') {
-				that.$store.dispatch("connectSocket")
+			that.$store.dispatch("getSystemInfo")
+			var systemInfo = that.$store.state.systemInfo;
+			var windowHeight = systemInfo.windowHeight;
+			that.screenHeight = systemInfo.screenHeight;
+			if (windowHeight >= 812) {
+				that.siginBlockTop = 80;
 			} else {
+				that.siginBlockTop = 65;
+			}
+			console.log(systemInfo)
+			if (signType == 'shake') {
 				let myShake = new Shake({
-					threshold: 20, // 默认摇动阈值
-					timeout: 1200 // 默认两次事件间隔时间
+					threshold: 10, // 默认摇动阈值
+					timeout: 1000 // 默认两次事件间隔时间
 				});
 				myShake.start();
 				window.addEventListener('shake', that.shakeEventDidOccur, false)
+			} else {
+				that.$store.dispatch("connectSocket")
 			}
 		},
 		onReady() {
@@ -175,7 +187,7 @@
 		background: url(../../static/bg.jpg) 50% 50% no-repeat #193977;
 		background-size: cover;
 		position: relative;
-		height: 100%;
+		min-height: 100%;
 	}
 
 	.sign-main {
@@ -202,7 +214,7 @@
 
 	.sigin-block {
 		width: 80%;
-		padding: 550upx 10% 0;
+		padding: 68% 10% 0;
 	}
 
 	.sigin-info {
@@ -213,7 +225,7 @@
 
 	.sigin-info-succ {
 		font-size: 42upx;
-		padding-top: 50upx;
+		padding-top: 10upx;
 	}
 
 	.sign-ipt {

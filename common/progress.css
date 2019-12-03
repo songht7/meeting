@@ -1,14 +1,34 @@
 .circleProgress_wrapper {
-	width: 200px;
-	height: 200px;
+	width: 500upx;
+	height: 500upx;
 	margin: 50px auto;
 	position: relative;
-	border: 1px solid #ddd;
+}
+
+
+.pro-img {
+	width: 460upx;
+	height: 460upx;
+	position: absolute;
+	top: 20upx;
+	left: 20upx;
+	border-radius: 50%;
+	overflow: hidden;
+	background-image: linear-gradient(#B0BAD2, #8C99B9);
+	display: flex;
+	justify-content: center;
+	flex-direction: row;
+	align-content: center;
+	align-items: center;
+}
+.pImg{
+	width: 85%;
+	height: 85%;
 }
 
 .wrapper {
-	width: 100px;
-	height: 200px;
+	width: 250upx;
+	height: 500upx;
 	position: absolute;
 	top: 0;
 	overflow: hidden;
@@ -23,71 +43,48 @@
 }
 
 .circleProgress {
-	width: 160px;
-	height: 160px;
-	border: 20px solid rgb(232, 232, 12);
+	width: 460upx;
+	height: 460upx;
+	border: 20upx solid #111750;
 	border-radius: 50%;
 	position: absolute;
 	top: 0;
-	-webkit-transform: rotate(45deg);
+	transform: rotate(-135deg);
+	/* 45deg */
 }
 
 .rightcircle {
-	border-top: 20px solid green;
-	border-right: 20px solid green;
+	border-top: 20upx solid #E1C699;
+	border-right: 20upx solid #E1C699;
 	right: 0;
-	-webkit-animation: circleProgressLoad_right 5s linear infinite;
+	/* -webkit-animation: circleProgressLoad_right 5s linear infinite; */
 }
 
 .leftcircle {
-	border-bottom: 20px solid green;
-	border-left: 20px solid green;
+	border-bottom: 20upx solid #E1C699;
+	border-left: 20upx solid #E1C699;
 	left: 0;
-	-webkit-animation: circleProgressLoad_left 5s linear infinite;
+	/* -webkit-animation: circleProgressLoad_left 5s linear infinite; */
 }
 
 @-webkit-keyframes circleProgressLoad_right {
 	0% {
-		border-top: 20px solid #ED1A1A;
-		border-right: 20px solid #ED1A1A;
 		-webkit-transform: rotate(45deg);
 	}
 
-	50% {
-		border-top: 20px solid rgb(232, 232, 12);
-		border-right: 20px solid rgb(232, 232, 12);
-		border-left: 20px solid rgb(81, 197, 81);
-		border-bottom: 20px solid rgb(81, 197, 81);
-		-webkit-transform: rotate(225deg);
-	}
-
+	50%,
 	100% {
-		border-left: 20px solid green;
-		border-bottom: 20px solid green;
 		-webkit-transform: rotate(225deg);
 	}
 }
 
 @-webkit-keyframes circleProgressLoad_left {
 	0% {
-		border-bottom: 20px solid #ED1A1A;
-		border-left: 20px solid #ED1A1A;
 		-webkit-transform: rotate(45deg);
 	}
 
-	50% {
-		border-bottom: 20px solid rgb(232, 232, 12);
-		border-left: 20px solid rgb(232, 232, 12);
-		border-top: 20px solid rgb(81, 197, 81);
-		border-right: 20px solid rgb(81, 197, 81);
-		-webkit-transform: rotate(45deg);
-	}
-
+	50%,
 	100% {
-		border-top: 20px solid green;
-		border-right: 20px solid green;
-		border-bottom: 20px solid green;
-		border-left: 20px solid green;
 		-webkit-transform: rotate(225deg);
 	}
 }

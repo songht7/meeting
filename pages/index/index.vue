@@ -3,10 +3,10 @@
 		<view class="sign-main">
 			<view class="send-box">
 				<img src="../../static/logo.png" id="Logo" alt="">
-				<block v-if="userSign=='Sign'">
-					<view class="user-bubble" v-if="up" :style="{'animation-play-state':paused}">
-						<view class="uname">{{name}}</view>
-					</view>
+				<view class="user-bubble" v-if="up" :style="{'animation-play-state':paused}">
+					<view class="uname">{{name}}</view>
+				</view>
+				<block v-if="signType=='Sign'">
 					<view class="sigin-form">
 						<view class="sigin-block">
 							<block v-if="siginSucc">
@@ -34,16 +34,22 @@
 				</block>
 				<block v-else>
 					<view class="circleProgress_wrapper">
+						<view class="pro-img">
+							<image class="pImg" :src="'../../static/pro-'+proImg+'.png'" mode="aspectFit"></image>
+						</view>
 						<view class="wrapper right">
-							<view class="circleProgress rightcircle">
-
+							<view class="circleProgress rightcircle" :style="{'transform':' rotate('+rotateRight+'deg)'}">
 							</view>
 						</view>
-
 						<view class="wrapper left">
-							<view class="circleProgress leftcircle">
-
+							<view class="circleProgress leftcircle" :style="{'transform':' rotate('+rotateLeft+'deg)'}">
 							</view>
+						</view>
+					</view>
+					<view class="shake-info" @click="shakeEventDidOccur">
+						<img src="../../static/shake.png" class="shake-img" alt="">
+						<view class="shake-ovs">
+							连续摇晃手机，助力新品发布
 						</view>
 					</view>
 				</block>
@@ -61,18 +67,33 @@
 				up: false,
 				paused: "paused",
 				siginSucc: false,
-				userSign: "Sign"
+				signType: "Sign",
+				proImg: 1,
+				proSize: 7,
+				rotateRight: -135,
+				rotateLeft: -135
 			}
 		},
 		onLoad(option) {
 			var that = this;
 			let sign = option.sign;
 			if (sign == 'shake') {
-				that.userSign = sign;
+				that.signType = sign;
 			}
 		},
 		onShow() {
-			this.$store.dispatch("connectSocket")
+			var that = this;
+			var signType = that.signType;
+			if (signType == 'shake') {
+				that.$store.dispatch("connectSocket")
+			} else {
+				let myShake = new Shake({
+					threshold: 20, // 默认摇动阈值
+					timeout: 1200 // 默认两次事件间隔时间
+				});
+				myShake.start();
+				window.addEventListener('shake', that.shakeEventDidOccur, false)
+			}
 		},
 		onReady() {
 			uni.onSocketOpen(function(res) {
@@ -88,6 +109,36 @@
 		components: {},
 		computed: {},
 		methods: {
+			shakeEventDidOccur() {
+				var that = this;
+				var defaultVal = -135;
+				var maxVal = 45;
+				if (that.proImg >= that.proSize && that.rotateLeft >= maxVal) {
+					var assist = "感谢您完成所有助力！";
+					console.log(assist)
+					that.up = true;
+					that.paused = "running";
+					that.name = assist;
+					setTimeout(() => {
+						that.up = false;
+						that.paused = "paused";
+					}, 3000)
+					return
+				}
+				var rRight = that.rotateRight + 90;
+				var rRightMax = rRight <= maxVal ? false : true;
+				that.rotateRight = rRight <= maxVal ? rRight : maxVal;
+				if (rRightMax) {
+					var rLeft = that.rotateLeft + 90;
+					var rLeftMax = rLeft <= maxVal ? false : true;
+					that.rotateLeft = rLeft <= maxVal ? rLeft : maxVal;
+					if (rLeftMax) {
+						that.rotateRight = defaultVal;
+						that.rotateLeft = defaultVal;
+						that.proImg = that.proImg + 1 <= that.proSize ? that.proImg + 1 : that.proSize;
+					}
+				}
+			},
 			sendSocketMessage(val) {
 				var that = this;
 				var _msg = val || that.name;
@@ -113,7 +164,8 @@
 </script>
 
 <style>
-    @import '../../common/progress.css';
+	@import '../../common/progress.css';
+
 	page {
 		height: 100%;
 		width: 100%;
@@ -260,5 +312,26 @@
 				0 0 40px #DB9824,
 				0 0 70px #DB9824;
 		}
+	}
+
+	.shake-info {
+		display: flex;
+		justify-content: center;
+		flex-direction: column;
+		align-content: center;
+		align-items: center;
+		padding: 20upx 0;
+	}
+
+	.shake-img {
+		width: 100upx;
+		height: auto;
+	}
+
+	.shake-info {
+		color: #FFFFFF;
+		font-size: 32upx;
+		line-height: 2;
+		padding: 20upx 0;
 	}
 </style>

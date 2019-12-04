@@ -69,7 +69,7 @@
 				up: false,
 				paused: "paused",
 				siginSucc: false,
-				signType: "sign",//sign：签到,assist：助力
+				signType: "sign", //sign：签到,assist：助力
 				proImg: 1,
 				proSize: 7,
 				rotateRight: -135,
@@ -82,11 +82,11 @@
 			if (sign == 'assist') {
 				that.signType = sign;
 				uni.setNavigationBarTitle({
-				    title: '新品助力'
+					title: '新品助力'
 				});
-			}else{
+			} else {
 				uni.setNavigationBarTitle({
-				    title: '恒洁-签到'
+					title: '恒洁-签到'
 				});
 			}
 		},
@@ -96,7 +96,7 @@
 			that.$store.dispatch("getSystemInfo")
 			var systemInfo = that.$store.state.systemInfo;
 			var windowHeight = systemInfo.windowHeight;
-			that.screenHeight = systemInfo.screenHeight;
+			that.screenHeight = systemInfo.screenHeight - 45;
 			if (windowHeight >= 812) {
 				that.siginBlockTop = 80;
 			} else {

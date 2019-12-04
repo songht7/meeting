@@ -96,7 +96,7 @@
 			that.$store.dispatch("getSystemInfo")
 			var systemInfo = that.$store.state.systemInfo;
 			var windowHeight = systemInfo.windowHeight;
-			that.screenHeight = systemInfo.screenHeight - 45;
+			that.screenHeight = systemInfo.screenHeight - 80;
 			if (windowHeight >= 812) {
 				that.siginBlockTop = 80;
 			} else {

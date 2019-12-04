@@ -191,7 +191,7 @@
 	}
 
 	.user-box {
-		background: url(../../static/bg.jpg) 50% 50% no-repeat #193977;
+		background: url(../../static/bg.jpg) 50% bottom no-repeat #193977;
 		background-size: cover;
 		position: relative;
 		min-height: 100%;

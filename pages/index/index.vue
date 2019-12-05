@@ -148,27 +148,16 @@
 		methods: {
 			shakeEventDidOccur() {
 				var that = this;
-				if (that.tjPlay == 'paused') {
+				if (that.tjPlay == 'paused' || that.shakeNumb >= that.proSize) {
+					that.rotateRight = defaultVal;
+					that.rotateLeft = defaultVal;
 					return
 				}
 				var defaultVal = -135; //进度条默认值
 				var maxVal = 45; //左右进度条最大值（右过度到左）
 				var rotateSize = 48; //设置旋转大小
 				that.shakeNumb = that.shakeNumb + 1;
-				if (that.shakeNumb > that.proSize) {
-					console.log("感谢您完成所有助力！")
-					that.rotateRight = defaultVal;
-					that.rotateLeft = defaultVal;
-					return
-					// that.up = true;
-					// that.paused = "running";
-					// that.name = assist;
-					// setTimeout(() => {
-					// 	that.up = false;
-					// 	that.paused = "paused";
-					// }, 3000)
-					// return
-				}
+				//console.log(that.shakeNumb, that.proSize)
 				var rRight = that.rotateRight + rotateSize;
 				var rRightMax = rRight <= maxVal ? false : true;
 				that.rotateRight = rRight <= maxVal ? rRight : maxVal;
@@ -181,7 +170,9 @@
 					that.proImg = that.proImg + 1 <= that.proSize ? that.proImg + 1 : that.proSize;
 				}
 				if (that.shakeNumb >= that.proSize) {
-					that.assistState = true;
+					setTimeout(function() {
+						that.assistState = true;
+					}, 1500);
 				}
 			},
 			sendSocketMessage(val) {

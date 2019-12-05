@@ -151,9 +151,9 @@
 				if (that.tjPlay == 'paused') {
 					return
 				}
-				var defaultVal = -135;
-				var maxVal = 45;
-				var rotateSize = 48;
+				var defaultVal = -135; //进度条默认值
+				var maxVal = 45; //左右进度条最大值（右过度到左）
+				var rotateSize = 48; //设置旋转大小
 				that.shakeNumb = that.shakeNumb + 1;
 				if (that.shakeNumb > that.proSize) {
 					console.log("感谢您完成所有助力！")

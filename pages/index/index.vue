@@ -122,8 +122,8 @@
 			console.log(systemInfo)
 			if (signType == 'assist') {
 				let myShake = new Shake({
-					threshold: 10, // 默认摇动阈值
-					timeout: 1000 // 默认两次事件间隔时间
+					threshold: 5, // 摇动阈值
+					timeout: 500 // 默认两次事件间隔时间
 				});
 				myShake.start();
 				window.addEventListener('shake', that.shakeEventDidOccur, false)

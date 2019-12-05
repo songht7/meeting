@@ -40,7 +40,7 @@
 							<img class="taiji taiji-right" src="../../static/taiji-right.png" :style="{'animation-play-state':tjPlay}">
 						</view>
 						<view class="pro-img">
-							<image v-if="!assistState" class="pImg" :src="'../../static/pro-'+proImg+'.png'" mode="aspectFit"></image>
+							<image v-if="!assistState" class="pImg" :class="['pImg-'+proImg]" :src="'../../static/pro-'+proImg+'.png'" mode="aspectFit"></image>
 							<swiper v-if="assistState" class="swiper-box" autoplay="autoplay" :indicator-dots="indicatorDots" circular="circular"
 							 interval="1000" duration="500">
 								<swiper-item v-for="pro in proSize" :key="pro">

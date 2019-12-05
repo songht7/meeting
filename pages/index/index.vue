@@ -31,6 +31,14 @@
 				</block>
 				<block v-else>
 					<view class="circleProgress_wrapper">
+						<view class="taiji-box" @click="taijiOpen">
+							<view class="spot-box" v-if="tjPlay=='paused'">
+								<image class="spot" src="../../static/spot.png" mode="aspectFit"></image>
+								<view class="spot-val">点击开启新品助力</view>
+							</view>
+							<image class="taiji taiji-left" src="../../static/taiji-left.png" mode="aspectFit" :style="{'animation-play-state':tjPlay}"></image>
+							<image class="taiji taiji-right" src="../../static/taiji-right.png" mode="aspectFit" :style="{'animation-play-state':tjPlay}"></image>
+						</view>
 						<view class="pro-img">
 							<image class="pImg" :src="'../../static/pro-'+proImg+'.png'" mode="aspectFit"></image>
 						</view>
@@ -43,7 +51,7 @@
 							</view>
 						</view>
 					</view>
-					<view class="shake-info" @click="shakeEventDidOccur">
+					<view class="shake-info" v-if="tjPlay=='running'" @click="shakeEventDidOccur">
 						<img src="../../static/shake.png" class="shake-img" alt="">
 						<view class="shake-ovs">
 							摇一摇，助力新品发布
@@ -68,6 +76,7 @@
 				name: "",
 				up: false,
 				paused: "paused",
+				tjPlay: "paused",
 				siginSucc: false,
 				signType: "sign", //sign：签到,assist：助力
 				proImg: 1,
@@ -130,6 +139,9 @@
 		methods: {
 			shakeEventDidOccur() {
 				var that = this;
+				if (that.tjPlay == 'paused') {
+					return
+				}
 				var defaultVal = -135;
 				var maxVal = 45;
 				if (that.proImg >= that.proSize && that.rotateLeft >= maxVal) {
@@ -177,6 +189,10 @@
 				}
 				console.log(_data);
 				that.$store.dispatch("sendSocketMessage", _data)
+			},
+			taijiOpen() {
+				var that = this;
+				that.tjPlay = 'running';
 			}
 		}
 	}
@@ -247,6 +263,7 @@
 		border: 1upx solid #CCCCCC;
 		padding: 5upx 10upx;
 		color: #173171;
+		text-align: center;
 	}
 
 	.sendMsg {
@@ -352,5 +369,112 @@
 		font-size: 32upx;
 		line-height: 2;
 		padding: 20upx 0;
+	}
+
+	.taiji-box {
+		width: 120%;
+		height: 120%;
+		position: absolute;
+		top: -10%;
+		left: -10%;
+		z-index: 10;
+		border-radius: 50%;
+	}
+
+	.spot-box {
+		position: absolute;
+		z-index: 11;
+		height: 100%;
+		width: 100%;
+		/* background: rgba(0, 0, 0, .2); */
+		border-radius: 50%;
+		left: 0;
+		top: 0;
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		align-content: center;
+		align-items: center;
+	}
+
+	.spot-val {
+		color: #FFFFFF;
+		font-size: 32upx;
+	}
+
+	.spot {
+		width: 8%;
+		height: 8%;
+		margin: 0 10upx 0 40%;
+		animation-name: spot-shine;
+		animation-duration: 2s;
+		animation-timing-function: ease;
+		animation-iteration-count: infinite;
+		animation-direction: alternate;
+	}
+
+	.taiji {
+		height: 100%;
+		position: absolute;
+		top: -3%;
+		animation-name: rotate-left;
+		animation-duration: 2s;
+		animation-timing-function: linear;
+		animation-iteration-count: 1;
+		animation-fill-mode: forwards;
+	}
+
+	.taiji-left {
+		left: -10%;
+	}
+
+	.taiji-right {
+		right: -10%;
+		top: 3%;
+		animation-name: rotate-right;
+	}
+
+	@keyframes spot-shine {
+		from {
+			transform: none
+		}
+
+		to {
+			transform: scale(2)
+		}
+	}
+
+	@keyframes rotate-left {
+		0% {
+			left: -10%;
+			opacity: 1;
+		}
+
+		50% {
+			left: -50%;
+			opacity: 0.5;
+		}
+
+		100% {
+			left: -100%;
+			opacity: 0;
+		}
+	}
+
+	@keyframes rotate-right {
+		0% {
+			right: -10%;
+			opacity: 1;
+		}
+
+		50% {
+			right: -50%;
+			opacity: 0.5;
+		}
+
+		100% {
+			right: -100%;
+			opacity: 0;
+		}
 	}
 </style>

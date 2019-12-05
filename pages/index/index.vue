@@ -472,16 +472,19 @@
 	@keyframes rotate-left {
 		0% {
 			left: -1%;
+			top: -2%;
 			opacity: 1;
 		}
 
 		50% {
 			left: -50%;
+			top: -50%;
 			opacity: 0.5;
 		}
 
 		100% {
 			left: -100%;
+			top: -100%;
 			opacity: 0;
 		}
 	}
@@ -489,16 +492,19 @@
 	@keyframes rotate-right {
 		0% {
 			right: -1%;
+			bottom: -2%;
 			opacity: 1;
 		}
 
 		50% {
 			right: -50%;
+			bottom: -50%;
 			opacity: 0.5;
 		}
 
 		100% {
 			right: -100%;
+			bottom: -100%;
 			opacity: 0;
 		}
 	}

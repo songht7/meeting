@@ -31,7 +31,7 @@
 				</block>
 				<block v-else>
 					<view class="circleProgress_wrapper">
-						<view class="taiji-box" @click="taijiOpen">
+						<view class="taiji-box" :class="{'ovHide':assistState}" @click="taijiOpen">
 							<view class="spot-box" v-if="tjPlay=='paused'">
 								<image class="spot" src="../../static/spot.png" mode="aspectFit"></image>
 								<view class="spot-val">点击开启新品助力</view>
@@ -400,15 +400,19 @@
 		box-shadow: 0 0 100upx 30upx #224386;
 	}
 
+	.ovHide {
+		overflow: hidden;
+	}
+
 	.spot-box {
 		position: absolute;
 		z-index: 11;
-		height: 100%;
-		width: 100%;
+		height: 120%;
+		width: 120%;
 		/* background: rgba(0, 0, 0, .2); */
 		border-radius: 50%;
-		left: 0;
-		top: 0;
+		left: -10%;
+		top: -10%;
 		display: flex;
 		flex-direction: row;
 		justify-content: center;
@@ -419,6 +423,7 @@
 	.spot-val {
 		color: #FFFFFF;
 		font-size: 32upx;
+		/* margin-left: 45%; */
 	}
 
 	.spot {

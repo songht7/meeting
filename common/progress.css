@@ -21,9 +21,10 @@
 	align-content: center;
 	align-items: center;
 }
-.pImg{
-	width: 85%;
-	height: 85%;
+
+.pImg {
+	width: 80%;
+	height: 80%;
 }
 
 .wrapper {

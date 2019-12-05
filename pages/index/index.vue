@@ -41,10 +41,10 @@
 						</view>
 						<view class="pro-img">
 							<image v-if="!assistState" class="pImg" :src="'../../static/pro-'+proImg+'.png'" mode="aspectFit"></image>
-							<swiper v-if="assistState" class="swiper-box" :indicator-dots="indicatorDots" autoplay="autoplay" circular="circular"
+							<swiper v-if="assistState" class="swiper-box" autoplay="autoplay" :indicator-dots="indicatorDots" circular="circular"
 							 interval="1000" duration="500">
 								<swiper-item v-for="pro in proSize" :key="pro">
-									<image class="pImg" :src="'../../static/pros-'+pro+'.png'" mode="aspectFit"></image>
+									<image class="pImg swiper-img" :src="'../../static/pros-'+pro+'.png'" mode="aspectFit"></image>
 								</swiper-item>
 							</swiper>
 						</view>
@@ -88,6 +88,7 @@
 				assistState: false,
 				proImg: 1,
 				proSize: 7,
+				shakeNumb: 0,
 				rotateRight: -135,
 				rotateLeft: -135,
 				indicatorDots: false
@@ -152,10 +153,12 @@
 				}
 				var defaultVal = -135;
 				var maxVal = 45;
-				if (that.proImg >= that.proSize && that.rotateLeft >= maxVal) {
-					var assist = "感谢您完成所有助力！";
-					that.assistState = true;
+				var rotateSize = 48;
+				that.shakeNumb = that.shakeNumb + 1;
+				if (that.shakeNumb > that.proSize) {
 					console.log("感谢您完成所有助力！")
+					that.rotateRight = defaultVal;
+					that.rotateLeft = defaultVal;
 					return
 					// that.up = true;
 					// that.paused = "running";
@@ -166,18 +169,19 @@
 					// }, 3000)
 					// return
 				}
-				var rRight = that.rotateRight + 90;
+				var rRight = that.rotateRight + rotateSize;
 				var rRightMax = rRight <= maxVal ? false : true;
 				that.rotateRight = rRight <= maxVal ? rRight : maxVal;
 				if (rRightMax) {
-					var rLeft = that.rotateLeft + 90;
+					var rLeft = that.rotateLeft + rotateSize;
 					var rLeftMax = rLeft <= maxVal ? false : true;
 					that.rotateLeft = rLeft <= maxVal ? rLeft : maxVal;
-					if (rLeftMax) {
-						that.rotateRight = defaultVal;
-						that.rotateLeft = defaultVal;
-						that.proImg = that.proImg + 1 <= that.proSize ? that.proImg + 1 : that.proSize;
-					}
+				}
+				if (that.shakeNumb > 1) {
+					that.proImg = that.proImg + 1 <= that.proSize ? that.proImg + 1 : that.proSize;
+				}
+				if (that.shakeNumb >= that.proSize) {
+					that.assistState = true;
 				}
 			},
 			sendSocketMessage(val) {
@@ -362,10 +366,18 @@
 
 	.swiper-box {
 		position: relative;
-		width: 90%;
-		height: 90%;
-		left: 5%;
-		top: 5%;
+		width: 100%;
+		height: 100%;
+		border-radius: 50%;
+		overflow: hidden;
+	}
+
+	uni-swiper-item {
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		align-content: center;
+		align-items: center;
 	}
 
 	.shake-info {

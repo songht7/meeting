@@ -36,8 +36,8 @@
 								<image class="spot" src="../../static/spot.png" mode="aspectFit"></image>
 								<view class="spot-val">点击开启新品助力</view>
 							</view>
-							<image class="taiji taiji-left" src="../../static/taiji-left.png" mode="aspectFit" :style="{'animation-play-state':tjPlay}"></image>
-							<image class="taiji taiji-right" src="../../static/taiji-right.png" mode="aspectFit" :style="{'animation-play-state':tjPlay}"></image>
+							<img class="taiji taiji-left" src="../../static/taiji-left.png" :style="{'animation-play-state':tjPlay}" />
+							<img class="taiji taiji-right" src="../../static/taiji-right.png" :style="{'animation-play-state':tjPlay}">
 						</view>
 						<view class="pro-img">
 							<image class="pImg" :src="'../../static/pro-'+proImg+'.png'" mode="aspectFit"></image>
@@ -372,13 +372,14 @@
 	}
 
 	.taiji-box {
-		width: 120%;
-		height: 120%;
+		width: 100%;
+		height: 100%;
 		position: absolute;
-		top: -10%;
-		left: -10%;
+		top: 0;
+		left: 0;
 		z-index: 10;
 		border-radius: 50%;
+		box-shadow: 0 0 100upx 30upx #224386;
 	}
 
 	.spot-box {
@@ -405,7 +406,7 @@
 	.spot {
 		width: 8%;
 		height: 8%;
-		margin: 0 10upx 0 40%;
+		margin: 0 10upx 0 45%;
 		animation-name: spot-shine;
 		animation-duration: 2s;
 		animation-timing-function: ease;
@@ -416,7 +417,7 @@
 	.taiji {
 		height: 100%;
 		position: absolute;
-		top: -3%;
+		top: -2%;
 		animation-name: rotate-left;
 		animation-duration: 2s;
 		animation-timing-function: linear;
@@ -425,12 +426,13 @@
 	}
 
 	.taiji-left {
-		left: -10%;
+		left: -1%;
 	}
 
 	.taiji-right {
-		right: -10%;
-		top: 3%;
+		top: auto;
+		right: -1%;
+		bottom: -2%;
 		animation-name: rotate-right;
 	}
 
@@ -446,7 +448,7 @@
 
 	@keyframes rotate-left {
 		0% {
-			left: -10%;
+			left: -1%;
 			opacity: 1;
 		}
 
@@ -463,7 +465,7 @@
 
 	@keyframes rotate-right {
 		0% {
-			right: -10%;
+			right: -1%;
 			opacity: 1;
 		}
 

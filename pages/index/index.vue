@@ -41,6 +41,7 @@
 						</view>
 						<view class="pro-img">
 							<image v-if="!assistState" class="pImg" :class="['pImg-'+proImg]" :src="'../../static/pro-'+proImg+'.png'" mode="aspectFit"></image>
+							 <!-- autoplay="autoplay" -->
 							<swiper v-if="assistState" class="swiper-box" autoplay="autoplay" :indicator-dots="indicatorDots" circular="circular"
 							 interval="1000" duration="500">
 								<swiper-item v-for="pro in proSize" :key="pro">
@@ -361,6 +362,7 @@
 		height: 100%;
 		border-radius: 50%;
 		overflow: hidden;
+		z-index: 5;
 	}
 
 	uni-swiper-item {

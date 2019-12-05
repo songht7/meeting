@@ -40,7 +40,13 @@
 							<img class="taiji taiji-right" src="../../static/taiji-right.png" :style="{'animation-play-state':tjPlay}">
 						</view>
 						<view class="pro-img">
-							<image class="pImg" :src="'../../static/pro-'+proImg+'.png'" mode="aspectFit"></image>
+							<image v-if="!assistState" class="pImg" :src="'../../static/pro-'+proImg+'.png'" mode="aspectFit"></image>
+							<swiper v-if="assistState" class="swiper-box" :indicator-dots="indicatorDots" autoplay="autoplay" circular="circular"
+							 interval="1000" duration="500">
+								<swiper-item v-for="pro in proSize" :key="pro">
+									<image class="pImg" :src="'../../static/pros-'+pro+'.png'" mode="aspectFit"></image>
+								</swiper-item>
+							</swiper>
 						</view>
 						<view class="wrapper right">
 							<view class="circleProgress rightcircle" :style="{'transform':' rotate('+rotateRight+'deg)'}">
@@ -51,7 +57,7 @@
 							</view>
 						</view>
 					</view>
-					<view class="shake-info" v-if="tjPlay=='running'" @click="shakeEventDidOccur">
+					<view class="shake-info" v-if="tjPlay=='running'&&!assistState" @click="shakeEventDidOccur">
 						<img src="../../static/shake.png" class="shake-img" alt="">
 						<view class="shake-ovs">
 							摇一摇，助力新品发布
@@ -79,10 +85,12 @@
 				tjPlay: "paused",
 				siginSucc: false,
 				signType: "sign", //sign：签到,assist：助力
+				assistState: false,
 				proImg: 1,
 				proSize: 7,
 				rotateRight: -135,
-				rotateLeft: -135
+				rotateLeft: -135,
+				indicatorDots: false
 			}
 		},
 		onLoad(option) {
@@ -146,15 +154,17 @@
 				var maxVal = 45;
 				if (that.proImg >= that.proSize && that.rotateLeft >= maxVal) {
 					var assist = "感谢您完成所有助力！";
-					console.log(assist)
-					that.up = true;
-					that.paused = "running";
-					that.name = assist;
-					setTimeout(() => {
-						that.up = false;
-						that.paused = "paused";
-					}, 3000)
+					that.assistState = true;
+					console.log("感谢您完成所有助力！")
 					return
+					// that.up = true;
+					// that.paused = "running";
+					// that.name = assist;
+					// setTimeout(() => {
+					// 	that.up = false;
+					// 	that.paused = "paused";
+					// }, 3000)
+					// return
 				}
 				var rRight = that.rotateRight + 90;
 				var rRightMax = rRight <= maxVal ? false : true;
@@ -348,6 +358,14 @@
 				0 0 40px #DB9824,
 				0 0 70px #DB9824;
 		}
+	}
+
+	.swiper-box {
+		position: relative;
+		width: 90%;
+		height: 90%;
+		left: 5%;
+		top: 5%;
 	}
 
 	.shake-info {

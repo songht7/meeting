@@ -7,12 +7,12 @@
 var api = {
 	"formal": {
 		"wsUrl": "ws://socket.wsshanghai.com:12345", //服务器地址 
-		"ajUrl": "//socket.wsshanghai.com", //服务器地址 开关
+		"ajUrl": "http://socket.wsshanghai.com", //服务器地址 开关
 		"appName": "年会"
 	},
 	"dev": {
 		"wsUrl": "ws://socket.wsshanghai.com:12345", //服务器地址
-		"ajUrl": "//socket.wsshanghai.com", //服务器地址 开关
+		"ajUrl": "http://socket.wsshanghai.com", //服务器地址 开关
 		"appName": "年会"
 	}
 }

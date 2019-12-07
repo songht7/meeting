@@ -1,5 +1,5 @@
 <template>
-	<view class="user-box" :style="{'height':screenHeight+'px'}">
+	<view class="user-box" :class="signType=='assist'?'bg2':''" :style="{'height':screenHeight+'px'}">
 		<view class="sign-main">
 			<view class="send-box">
 				<img src="../../static/logo.png" id="Logo" alt="">
@@ -85,7 +85,7 @@
 				paused: "paused",
 				tjPlay: "paused",
 				siginSucc: false,
-				signType: "sign", //sign：签到,assist：助力
+				signType: "", //sign：签到,assist：助力
 				assistState: false,
 				proImg: 1,
 				proSize: 7,
@@ -104,6 +104,7 @@
 					title: '新品助力'
 				});
 			} else {
+				that.signType = 'sign';
 				uni.setNavigationBarTitle({
 					title: '恒洁-签到'
 				});
@@ -213,12 +214,14 @@
 	}
 
 	.user-box {
-		background: url(../../static/bg.jpg) 50% bottom no-repeat #193977;
+		background: url("../../static/bg.jpg") 50% bottom no-repeat #193977;
 		background-size: cover;
 		position: relative;
 		min-height: 100%;
 	}
-
+	.bg2{
+		background-image: url("../../static/bg2.jpg");
+	}
 	.sign-main {
 		padding: 20upx;
 		height: 90%;

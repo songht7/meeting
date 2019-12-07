@@ -31,7 +31,7 @@
 				</block>
 				<block v-else>
 					<view class="circleProgress_wrapper">
-						<view class="taiji-box" :class="{'ovHide':assistState}" @click="taijiOpen">
+						<view class="taiji-box ovHide" :class="{'ovHide':assistState}" @click="taijiOpen">
 							<view class="spot-box" v-if="tjPlay=='paused'">
 								<image class="spot" src="../../static/spot.png" mode="aspectFit"></image>
 								<view class="spot-val">点击开启新品助力</view>
@@ -39,7 +39,7 @@
 							<img class="taiji taiji-left" src="../../static/taiji-left.png" :style="{'animation-play-state':tjPlay}" />
 							<img class="taiji taiji-right" src="../../static/taiji-right.png" :style="{'animation-play-state':tjPlay}">
 						</view>
-						<view class="pro-img">
+						<view class="pro-img" :class="{'new-pro':assistState}">
 							<image v-if="!assistState" class="pImg" :class="['pImg-'+proImg]" :src="'../../static/pro-'+proImg+'.png'" mode="aspectFit"></image>
 							 <!-- autoplay="autoplay" -->
 							<swiper v-if="assistState" class="swiper-box" autoplay="autoplay" :indicator-dots="indicatorDots" circular="circular"
@@ -227,7 +227,7 @@
 	#Logo {
 		width: 70%;
 		display: block;
-		margin: 50upx auto 25upx;
+		margin: 50upx auto;
 	}
 
 	.send-box {

@@ -1,7 +1,7 @@
 .circleProgress_wrapper {
 	width: 500upx;
 	height: 500upx;
-	margin: 50px auto;
+	margin: 180upx auto 50upx;
 	position: relative;
 }
 
@@ -20,6 +20,10 @@
 	flex-direction: row;
 	align-content: center;
 	align-items: center;
+}
+
+.new-pro {
+	background-image: none;
 }
 
 .pImg {

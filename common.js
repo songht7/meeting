@@ -23,6 +23,10 @@ export default {
 		"wsUrl": api[lks]["wsUrl"],
 		"ajUrl": api[lks]["ajUrl"],
 		"appName": api[lks]["appName"],
-		"addr": {}
+		"addr": {
+			"activityCheck": '/activityCheck.htm',
+			"activityStart": '/activityStart.htm',
+			"activityStop": '/activityStop.htm'
+		}
 	}
 }

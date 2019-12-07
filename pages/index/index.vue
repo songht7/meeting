@@ -32,7 +32,7 @@
 				</block>
 				<block v-else-if="signType=='assist'">
 					<view class="circleProgress_wrapper">
-						<view class="taiji-box ovHide" :class="{'ovHide':assistState}" @click="taijiOpen">
+						<view class="taiji-box" :class="{'ovHide':assistState||ovHide}" @click="taijiOpen">
 							<view class="spot-box" v-if="tjPlay=='paused'">
 								<image class="spot" src="../../static/spot.png" mode="aspectFit"></image>
 								<view class="spot-val">点击开启新品助力</view>
@@ -93,7 +93,9 @@
 				shakeNumb: 0,
 				rotateRight: -135,
 				rotateLeft: -135,
-				indicatorDots: false
+				indicatorDots: false,
+				ovHide: false,
+				shakeSwitchState: false //助力摇一摇是否开启
 			}
 		},
 		onLoad(option) {
@@ -125,6 +127,7 @@
 			}
 			console.log(systemInfo)
 			if (signType == 'assist') {
+				that.shakeSwitch('activityCheck');
 				let myShake = new Shake({
 					threshold: 5, // 摇动阈值
 					timeout: 500 // 默认两次事件间隔时间
@@ -151,6 +154,10 @@
 		methods: {
 			shakeEventDidOccur() {
 				var that = this;
+				that.shakeSwitch('activityCheck');
+				if (!that.shakeSwitchState) {
+					return
+				}
 				if (that.tjPlay == 'paused' || that.shakeNumb >= that.proSize) {
 					that.rotateRight = defaultVal;
 					that.rotateLeft = defaultVal;
@@ -200,7 +207,27 @@
 			},
 			taijiOpen() {
 				var that = this;
+				if (!that.shakeSwitchState) {
+					return
+				}
+				that.ovHide = true;
 				that.tjPlay = 'running';
+			},
+			shakeSwitch(type) {
+				var that = this;
+				var shakeSwitchState = that.shakeSwitchState;
+				var _inter = type ? type : (shakeSwitchState ? 'activityStop' : 'activityStart');
+				console.log(shakeSwitchState, _inter)
+				let _data = {
+					"inter": _inter
+				};
+				_data["fun"] = function(res) {
+					if (res) {
+						that.shakeSwitchState = res == 'on' ? true : false;
+					}
+				}
+				that.$store.dispatch("getData", _data)
+
 			}
 		}
 	}

@@ -24,9 +24,8 @@ const store = new Vuex.Store({
 	},
 	actions: {
 		getData(ctx, parm) {
-			ctx.commit("switch_loading", "1")
 			let _parm = parm.parm || '';
-			let _url = ctx.state.interface.apiurl + ctx.state.interface.addr[parm.inter] + _parm
+			let _url = ctx.state.interface.ajUrl + ctx.state.interface.addr[parm.inter] + _parm
 			console.log("getData-url-", parm.inter, "：", _url)
 			console.log("getData-parm-", parm.inter, "：", parm)
 			var result = [];
@@ -39,7 +38,7 @@ const store = new Vuex.Store({
 					console.log("getData-success-", parm.inter, "：", res)
 					//console.log(res)
 					if (res.success) {
-						ctx.commit("update_data", res.data.data)
+						//ctx.commit("update_data", res.data.data)
 					}
 					result = res.data
 				},
@@ -52,7 +51,6 @@ const store = new Vuex.Store({
 					}
 				},
 				complete() {
-					ctx.commit("switch_loading", "0")
 					if (parm.fun) {
 						new parm.fun(result)
 					}

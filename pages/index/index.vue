@@ -5,6 +5,7 @@
 				<img src="../../static/logo.png" id="Logo" alt="">
 				<block v-if="signType=='sign'">
 					<view class="sigin-form">
+						<image class="water" :style="{'animation-play-state':paused}" src="../../static/water.png" mode="aspectFit"></image>
 						<view class="sigin-block" :style="{'padding-top':siginBlockTop+'%'}">
 							<block v-if="siginSucc">
 								<view class="sigin-info sigin-info-succ" :style="{'animation-play-state':paused}">
@@ -219,9 +220,11 @@
 		position: relative;
 		min-height: 100%;
 	}
-	.bg2{
+
+	.bg2 {
 		background-image: url("../../static/bg2.jpg");
 	}
+
 	.sign-main {
 		padding: 20upx;
 		height: 90%;
@@ -239,14 +242,39 @@
 	}
 
 	.sigin-form {
-		background: url(../../static/water.png) 50% 50% no-repeat;
-		background-size: contain;
+		/* background: url(../../static/water.png) 50% 50% no-repeat;
+		background-size: contain; */
 		height: 90%;
+		position: relative;
+	}
+
+	.water {
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		z-index: 1;
+		animation-name: water-show;
+		animation-duration: 2.5s;
+		animation-timing-function: ease;
+		animation-iteration-count: 1;
+		animation-fill-mode: forwards;
+	}
+
+	@keyframes water-show {
+		from {
+			opacity: 0.5;
+		}
+
+		to {
+			opacity: 1;
+		}
 	}
 
 	.sigin-block {
 		width: 80%;
 		padding: 68% 10% 0;
+		position: relative;
+		z-index: 2;
 	}
 
 	.sigin-info {

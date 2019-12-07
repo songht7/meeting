@@ -7,7 +7,7 @@
 					<view class="sigin-form">
 						<view class="sigin-block" :style="{'padding-top':siginBlockTop+'%'}">
 							<block v-if="siginSucc">
-								<view class="sigin-info sigin-info-succ">
+								<view class="sigin-info sigin-info-succ" :style="{'animation-play-state':paused}">
 									<text>欢迎您参加</text><br />
 									<text>恒洁2020年度经销商大会</text>
 								</view>
@@ -29,7 +29,7 @@
 						</view>
 					</view>
 				</block>
-				<block v-else>
+				<block v-else-if="signType=='assist'">
 					<view class="circleProgress_wrapper">
 						<view class="taiji-box ovHide" :class="{'ovHide':assistState}" @click="taijiOpen">
 							<view class="spot-box" v-if="tjPlay=='paused'">
@@ -41,7 +41,7 @@
 						</view>
 						<view class="pro-img" :class="{'new-pro':assistState}">
 							<image v-if="!assistState" class="pImg" :class="['pImg-'+proImg]" :src="'../../static/pro-'+proImg+'.png'" mode="aspectFit"></image>
-							 <!-- autoplay="autoplay" -->
+							<!-- autoplay="autoplay" -->
 							<swiper v-if="assistState" class="swiper-box" autoplay="autoplay" :indicator-dots="indicatorDots" circular="circular"
 							 interval="1000" duration="500">
 								<swiper-item v-for="pro in proSize" :key="pro">
@@ -184,14 +184,14 @@
 					"msg": _msg
 				};
 				_data["fun"] = function() {
-					that.up = true;
+					// that.up = true;
 					that.siginSucc = true;
 					that.paused = "running";
-					setTimeout(() => {
-						that.up = false;
-						//that.siginSucc = false;
-						that.paused = "paused";
-					}, 3000)
+					// setTimeout(() => {
+					// 	that.up = false;
+					// 	//that.siginSucc = false;
+					// 	that.paused = "paused";
+					// }, 3000)
 				}
 				console.log(_data);
 				that.$store.dispatch("sendSocketMessage", _data)
@@ -255,6 +255,21 @@
 	.sigin-info-succ {
 		font-size: 42upx;
 		padding-top: 10upx;
+		animation-name: sigin-succ;
+		animation-duration: 2s;
+		animation-timing-function: ease;
+		animation-iteration-count: 1;
+		animation-fill-mode: forwards;
+	}
+
+	@keyframes sigin-succ {
+		from {
+			transform: scale(0.2)
+		}
+
+		to {
+			transform: scale(1)
+		}
 	}
 
 	.sign-ipt {

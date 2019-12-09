@@ -25,7 +25,8 @@ const store = new Vuex.Store({
 	actions: {
 		getData(ctx, parm) {
 			let _parm = parm.parm || '';
-			let _url = ctx.state.interface.ajUrl + ctx.state.interface.addr[parm.inter] + _parm
+			let intUrl = parm.intUrl || 'ajUrlb';
+			let _url = ctx.state.interface[intUrl] + ctx.state.interface.addr[parm.inter] + _parm
 			console.log("getData-url-", parm.inter, "：", _url)
 			console.log("getData-parm-", parm.inter, "：", parm)
 			var result = [];

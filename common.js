@@ -8,11 +8,13 @@ var api = {
 	"formal": {
 		"wsUrl": "ws://socket.wsshanghai.com:12345", //服务器地址 
 		"ajUrl": "http://socket.wsshanghai.com", //服务器地址 开关
+		"ajUrlb": "https://socketb.wsshanghai.com", //服务器地址 开关
 		"appName": "年会"
 	},
 	"dev": {
 		"wsUrl": "ws://socket.wsshanghai.com:12345", //服务器地址
 		"ajUrl": "http://socket.wsshanghai.com", //服务器地址 开关
+		"ajUrlb": "https://socketb.wsshanghai.com", //服务器地址 开关 https的话用socketb
 		"appName": "年会"
 	}
 }
@@ -22,6 +24,7 @@ export default {
 		"site": lks,
 		"wsUrl": api[lks]["wsUrl"],
 		"ajUrl": api[lks]["ajUrl"],
+		"ajUrlb": api[lks]["ajUrlb"],
 		"appName": api[lks]["appName"],
 		"addr": {
 			"activityCheck": '/activityCheck.htm',

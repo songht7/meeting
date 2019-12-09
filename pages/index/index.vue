@@ -35,29 +35,31 @@
 						<view class="taiji-box" :class="{'ovHide':assistState||ovHide}" @click="taijiOpen">
 							<view class="spot-box" v-if="tjPlay=='paused'">
 								<image class="spot" src="../../static/spot.png" mode="aspectFit"></image>
-								<view class="spot-val">点击开启新品助力</view>
+								<view class="spot-val">{{shakeSwitchState?'点击开启新品助力':'新品发布,敬请期待'}}</view>
 							</view>
 							<img class="taiji taiji-left" src="../../static/taiji-left.png" :style="{'animation-play-state':tjPlay}" />
 							<img class="taiji taiji-right" src="../../static/taiji-right.png" :style="{'animation-play-state':tjPlay}">
 						</view>
-						<view class="pro-img" :class="{'new-pro':assistState}">
-							<image v-if="!assistState" class="pImg" :class="['pImg-'+proImg]" :src="'../../static/pro-'+proImg+'.png'" mode="aspectFit"></image>
-							<!-- autoplay="autoplay" -->
-							<swiper v-if="assistState" class="swiper-box" autoplay="autoplay" :indicator-dots="indicatorDots" circular="circular"
-							 interval="1000" duration="500">
-								<swiper-item v-for="pro in proSize" :key="pro">
-									<image class="pImg swiper-img" :src="'../../static/pros-'+pro+'.png'" mode="aspectFit"></image>
-								</swiper-item>
-							</swiper>
-						</view>
-						<view class="wrapper right">
-							<view class="circleProgress rightcircle" :style="{'transform':' rotate('+rotateRight+'deg)'}">
+						<block v-if="shakeSwitchState">
+							<view class="pro-img" :class="{'new-pro':assistState}">
+								<image v-if="!assistState" class="pImg" :class="['pImg-'+proImg]" :src="'../../static/pro-'+proImg+'.png'" mode="aspectFit"></image>
+								<!-- autoplay="autoplay" -->
+								<swiper v-if="assistState" class="swiper-box" autoplay="autoplay" :indicator-dots="indicatorDots" circular="circular"
+								 interval="1000" duration="500">
+									<swiper-item v-for="pro in proSize" :key="pro">
+										<image class="pImg swiper-img" :src="'../../static/pros-'+pro+'.png'" mode="aspectFit"></image>
+									</swiper-item>
+								</swiper>
 							</view>
-						</view>
-						<view class="wrapper left">
-							<view class="circleProgress leftcircle" :style="{'transform':' rotate('+rotateLeft+'deg)'}">
+							<view class="wrapper right">
+								<view class="circleProgress rightcircle" :style="{'transform':' rotate('+rotateRight+'deg)'}">
+								</view>
 							</view>
-						</view>
+							<view class="wrapper left">
+								<view class="circleProgress leftcircle" :style="{'transform':' rotate('+rotateLeft+'deg)'}">
+								</view>
+							</view>
+						</block>
 					</view>
 					<view class="shake-info" v-if="tjPlay=='running'&&!assistState" @click="shakeEventDidOccur">
 						<img src="../../static/shake.png" class="shake-img" alt="">
@@ -219,6 +221,7 @@
 				var _inter = type ? type : (shakeSwitchState ? 'activityStop' : 'activityStart');
 				console.log(shakeSwitchState, _inter)
 				let _data = {
+					"intUrl": 'ajUrlb',
 					"inter": _inter
 				};
 				_data["fun"] = function(res) {
@@ -518,7 +521,7 @@
 	.taiji {
 		height: 100%;
 		position: absolute;
-		top: -2%;
+		top: -18%;
 		animation-name: rotate-left;
 		animation-duration: 2s;
 		animation-timing-function: linear;
@@ -527,13 +530,13 @@
 	}
 
 	.taiji-left {
-		left: -1%;
+		left: -3%;
 	}
 
 	.taiji-right {
 		top: auto;
-		right: -1%;
-		bottom: -2%;
+		right: -3%;
+		bottom: -18%;
 		animation-name: rotate-right;
 	}
 

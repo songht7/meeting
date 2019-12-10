@@ -2,6 +2,7 @@
 	<view class="user-box" :class="signType=='assist'?'bg2':''" :style="{'height':screenHeight+'px'}">
 		<view class="sign-main">
 			<view class="send-box">
+				<view class="typeBtn socketErr" v-if="$store.state.socketErr" @click="$store.dispatch('connectSocket')">{{$store.state.socketErr}}</view>
 				<img src="../../static/logo.png" id="Logo" alt="">
 				<block v-if="signType=='sign'">
 					<view class="sigin-form">
@@ -184,12 +185,13 @@
 				window.addEventListener('shake', that.shakeEventDidOccur, false)
 			} else {
 				that.$store.dispatch("connectSocket")
+				uni.onSocketOpen(function(res) {
+					console.log('WebSocket连接已打开！');
+					that.$store.state.socketErr = "";
+				});
 			}
 		},
 		onReady() {
-			uni.onSocketOpen(function(res) {
-				console.log('WebSocket连接已打开！');
-			});
 		},
 		onHide() {
 			this.sendSocketMessage('space_close')

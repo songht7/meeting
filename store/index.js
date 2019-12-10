@@ -15,7 +15,8 @@ const store = new Vuex.Store({
 		data: {},
 		interface: common.Interface,
 		systemInfo: {},
-		socketOpen: false
+		socketOpen: false,
+		socketErr: ""
 	},
 	mutations: {
 		setSystemInfo(state, data) {
@@ -77,6 +78,7 @@ const store = new Vuex.Store({
 					ctx.state.socketOpen = true;
 				},
 				fail(err) {
+					ctx.state.socketErr = "同步连接异常，请刷新页面...";
 					console.log("connectSocket-fail：", err)
 					result = {
 						"success": false,
@@ -88,6 +90,10 @@ const store = new Vuex.Store({
 		},
 		onSocketMessage(ctx, parm) {
 			console.log(parm)
+			uni.onSocketError(function(res) {
+				ctx.state.socketErr = "同步连接异常，请刷新页面...";
+				console.log('WebSocket连接打开失败，请检查！');
+			});
 			uni.onSocketMessage(function(res) {
 				console.log('收到服务器内容：' + res);
 				if (parm.fun) {
@@ -96,6 +102,10 @@ const store = new Vuex.Store({
 			});
 		},
 		sendSocketMessage(ctx, parm) {
+			uni.onSocketError(function(res) {
+				ctx.state.socketErr = "同步连接异常，请刷新页面...";
+				console.log('WebSocket连接打开失败，请检查！');
+			});
 			if (ctx.state.socketOpen) {
 				if (parm.fun) {
 					new parm.fun()

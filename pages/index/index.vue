@@ -73,29 +73,36 @@
 				</block>
 				<block v-else-if="signType=='danmu'">
 					<view class="danmu-box">
-						<view class="danmu-row row-helf">
-							<view class="danmu-title">
-								城市
+						<block v-if="blessingState!='on'">
+							<view class="danmu-row row-helf">
+								<view class="danmu-title">
+									城市
+								</view>
+								<input class="danmu-ipt" type="text" v-model="city" placeholder="" />
 							</view>
-							<input class="danmu-ipt" type="text" v-model="city" placeholder="" />
-						</view>
-						<view class="danmu-row row-helf">
-							<view class="danmu-title">
-								姓名
+							<view class="danmu-row row-helf">
+								<view class="danmu-title">
+									姓名
+								</view>
+								<input class="danmu-ipt" type="text" v-model="name" placeholder="" />
 							</view>
-							<input class="danmu-ipt" type="text" v-model="name" placeholder="" />
-						</view>
-						<view class="danmu-row">
-							<view class="danmu-title">
-								我对恒洁2020的祝福
+							<view class="danmu-row">
+								<view class="danmu-title">
+									我对恒洁2020的祝福
+								</view>
+								<textarea class="danmu-ipt danmu-area" v-model="blessing" auto-height maxlength="-1" />
+								</view>
+							<view class="danmu-row">
+								<view class="sendMsg danmu-btn" @click="sendSocketMessage('blessing')">
+									点击提交
+								</view>
 							</view>
-							<textarea class="danmu-ipt danmu-area" v-model="blessing" auto-height maxlength="-1" />
+						</block>
+						<block v-else>
+							<view class="blessingOn">
+								祝福已提交，感谢您的参与
 							</view>
-						<view class="danmu-row">
-							<view class="sendMsg danmu-btn" @click="sendSocketMessage('blessing')">
-								点击提交
-							</view>
-						</view>
+						</block>
 					</view>
 				</block>
 				<view class="user-bubble" v-if="up" :style="{'animation-play-state':paused}">
@@ -129,7 +136,8 @@
 				rotateLeft: -135,
 				indicatorDots: false,
 				ovHide: false,
-				shakeSwitchState: false //助力摇一摇是否开启
+				shakeSwitchState: false, //助力摇一摇是否开启
+				blessingState:""
 			}
 		},
 		onLoad(option) {
@@ -142,6 +150,7 @@
 					_title = '新品助力'
 					break;
 				case 'danmu':
+					that.blessingState='off';
 					_title = '祝福'
 					break;
 				default:
@@ -227,7 +236,7 @@
 			sendSocketMessage(val) {
 				var that = this;
 				if (val == 'blessing') {
-					val = `blessing,${that.name},${that.city},${that.blessing}`
+					val = `blessing,${that.name},${that.city},${that.blessing}`;
 				}
 				var _msg = val || that.name;
 				console.log(_msg)
@@ -238,6 +247,9 @@
 					// that.up = true;
 					that.siginSucc = true;
 					that.paused = "running";
+					if(that.blessingState=='off'){
+						that.blessingState='on';
+					}
 					// setTimeout(() => {
 					// 	that.up = false;
 					// 	//that.siginSucc = false;

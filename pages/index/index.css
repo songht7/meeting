@@ -389,13 +389,43 @@ uni-swiper-item {
 	line-height: 1.4;
 	color: #1B2556;
 }
-.danmu-btn{
+
+.danmu-btn {
 	background: #3659B3;
 	width: 100%;
-	padding: 15upx 0;
+	padding: 20upx 0;
 }
-#AssistComming{
+
+#AssistComming {
 	display: block;
 	width: 70%;
 	margin: 45% auto 0;
+}
+
+.blessingOn {
+	font-size: 36upx;
+	text-align: center;
+	position: relative;
+	color: #FFFFFF;
+	line-height: 2;
+	padding: 0 60upx;
+	margin: 45% auto 0;
+	text-shadow: 5upx 5upx 5upx #0E2253;
+	transform: scale(1.2)
+}
+
+.blessingOn:before,
+.blessingOn:after {
+	content: "—";
+	color: inherit;
+	font-size: inherit;
+	position: absolute;
+	top: 45%;
+	left: 0;
+	line-height: 0;
+}
+
+.blessingOn:after {
+	left: auto;
+	right: 0;
 }

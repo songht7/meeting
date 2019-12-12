@@ -190,7 +190,7 @@
 					});
 					myShake.start();
 					window.addEventListener('shake', that.shakeEventDidOccur, false)
-				}, 1000)
+				}, 2000)
 			} else {
 				that.$store.dispatch("connectSocket")
 				uni.onSocketOpen(function(res) {

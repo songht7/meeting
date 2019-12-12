@@ -158,7 +158,7 @@
 					break;
 				case 'danmu':
 					that.blessingState = 'off';
-					_title = '祝福'
+					_title = '给恒洁2020的寄语'
 					break;
 				default:
 					_title = '恒洁-签到'

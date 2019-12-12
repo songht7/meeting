@@ -6,7 +6,8 @@
 				<img src="../../static/logo.png" id="Logo" alt="">
 				<block v-if="signType=='sign'">
 					<view class="sigin-form">
-						<image class="water" :style="{'animation-play-state':paused}" src="../../static/water.png" mode="aspectFit"></image>
+						<image class="water" :class="paused == 'running'?'water-anim':''" :style="{'animation-play-state':paused}" src="../../static/water.png"
+						 mode="aspectFit"></image>
 						<view class="sigin-block" :style="{'padding-top':siginBlockTop+'%'}">
 							<block v-if="siginSucc">
 								<view class="sigin-info sigin-info-succ" :style="{'animation-play-state':paused}">
@@ -19,7 +20,7 @@
 									<view class="sigin-info">
 										输入您的姓名
 									</view>
-									<input class="sign" type="text" v-model="name" />
+									<input class="sign" type="text" @blur="pageRestore" v-model="name" />
 									<view class="sendMsg" @click="sendSocketMessage('')">
 										点击签到
 									</view>
@@ -31,20 +32,24 @@
 				<block v-else-if="signType=='assist'">
 					<block v-if="shakeSwitchState">
 						<view class="circleProgress_wrapper">
-							<view class="taiji-box" :class="{'ovHide':assistState||ovHide}" @click="taijiOpen">
+							<view class="taiji-box" :class="[assistState||ovHide?'ovHide':'',taijiBox]" @click="taijiOpen">
 								<view class="spot-box" v-if="tjPlay=='paused'">
 									<image class="spot" src="../../static/spot.png" mode="aspectFit"></image>
 									<view class="spot-val">{{shakeSwitchState?'点击开启新品助力':'新品发布,敬请期待'}}</view>
 								</view>
-								<img class="taiji taiji-left" src="../../static/taiji-left.png" :style="{'animation-play-state':tjPlay}" />
-								<img class="taiji taiji-right" src="../../static/taiji-right.png" :style="{'animation-play-state':tjPlay}">
+								<view class="taiji taiji-left" :style="{'animation-play-state':tjPlay}">
+									<img class="taiji-img taiji-img-left" src="../../static/taiji-left.png" />
+								</view>
+								<view class="taiji taiji-right" :style="{'animation-play-state':tjPlay}">
+									<img class="taiji-img taiji-img-right" src="../../static/taiji-right.png" />
+								</view>
 							</view>
 							<block v-if="shakeSwitchState">
 								<view class="pro-img" :class="{'new-pro':assistState}">
-									<image v-if="!assistState" class="pImg" :class="['pImg-'+proImg]" :src="'../../static/pro-'+proImg+'.png'"
+									<image v-show="!assistState" class="pImg" :class="['pImg-'+proImg]" :src="'../../static/pro-'+proImg+'.png'"
 									 mode="aspectFit"></image>
 									<!-- autoplay="autoplay" -->
-									<swiper v-if="assistState" class="swiper-box" autoplay="autoplay" :indicator-dots="indicatorDots" circular="circular"
+									<swiper v-show="assistState" class="swiper-box" autoplay="autoplay" :indicator-dots="indicatorDots" circular="circular"
 									 interval="1000" duration="500">
 										<swiper-item v-for="pro in proSize" :key="pro">
 											<image class="pImg swiper-img" :src="'../../static/pros-'+pro+'.png'" mode="aspectFit"></image>
@@ -79,20 +84,20 @@
 								<view class="danmu-title">
 									城市
 								</view>
-								<input class="danmu-ipt" type="text" v-model="city" placeholder="" />
+								<input class="danmu-ipt" type="text" @blur="pageRestore" v-model="city" placeholder="" />
 							</view>
 							<view class="danmu-row row-helf">
 								<view class="danmu-title">
 									姓名
 								</view>
-								<input class="danmu-ipt" type="text" v-model="name" placeholder="" />
+								<input class="danmu-ipt" type="text" @blur="pageRestore" v-model="name" placeholder="" />
 							</view>
 							<view class="danmu-row">
 								<view class="danmu-title">
 									我对恒洁2020的祝福
 								</view>
-								<textarea class="danmu-ipt danmu-area" v-model="blessing" auto-height maxlength="-1" />
-								</view>
+								<textarea class="danmu-ipt danmu-area" @blur="pageRestore" v-model="blessing" auto-height maxlength="-1" />
+							</view>
 							<view class="danmu-row">
 								<view class="sendMsg danmu-btn" @click="sendSocketMessage('blessing')">
 									点击提交
@@ -133,12 +138,13 @@
 				proImg: 1, //当前图片index
 				proSize: 7, //图片总数
 				shakeNumb: 0,
+				taijiBox: '', //摇一摇背景样式
 				rotateRight: -135,
 				rotateLeft: -135,
 				indicatorDots: false,
 				ovHide: false,
 				shakeSwitchState: false, //助力摇一摇是否开启
-				blessingState:""
+				blessingState: ""
 			}
 		},
 		onLoad(option) {
@@ -151,7 +157,7 @@
 					_title = '新品助力'
 					break;
 				case 'danmu':
-					that.blessingState='off';
+					that.blessingState = 'off';
 					_title = '祝福'
 					break;
 				default:
@@ -191,8 +197,7 @@
 				});
 			}
 		},
-		onReady() {
-		},
+		onReady() {},
 		onHide() {
 			this.sendSocketMessage('space_close')
 		},
@@ -217,6 +222,7 @@
 				var maxVal = 45; //左右进度条最大值（右过度到左）
 				var rotateSize = 48; //设置旋转大小
 				that.shakeNumb = that.shakeNumb + 1;
+				that.taijiBox = 'taiji-box-' + that.shakeNumb;
 				//console.log(that.shakeNumb, that.proSize)
 				var rRight = that.rotateRight + rotateSize;
 				var rRightMax = rRight <= maxVal ? false : true;
@@ -249,8 +255,8 @@
 					// that.up = true;
 					that.siginSucc = true;
 					that.paused = "running";
-					if(that.blessingState=='off'){
-						that.blessingState='on';
+					if (that.blessingState == 'off') {
+						that.blessingState = 'on';
 					}
 					// setTimeout(() => {
 					// 	that.up = false;
@@ -285,6 +291,13 @@
 				}
 				that.$store.dispatch("getData", _data)
 
+			},
+			pageRestore() {
+				//console.log("pageRestore")
+				uni.pageScrollTo({
+					scrollTop: 0,
+					duration: 0
+				})
 			}
 		}
 	}

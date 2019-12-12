@@ -61,14 +61,14 @@
 .rightcircle {
 	border-top: 20upx solid #E1C699;
 	border-right: 20upx solid #E1C699;
-	right: 4upx;
+	right: 2upx;
 	/* -webkit-animation: circleProgressLoad_right 5s linear infinite; */
 }
 
 .leftcircle {
 	border-bottom: 20upx solid #E1C699;
 	border-left: 20upx solid #E1C699;
-	left: 4upx;
+	left: 2upx;
 	/* -webkit-animation: circleProgressLoad_left 5s linear infinite; */
 }
 

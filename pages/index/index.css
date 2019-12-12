@@ -3,6 +3,10 @@ page {
 	width: 100%;
 }
 
+.ovHide {
+	overflow: hidden;
+}
+
 .user-box {
 	background: url("../../static/bg.jpg") 50% bottom no-repeat #193977;
 	background-size: cover;
@@ -269,10 +273,21 @@ uni-swiper-item {
 
 .taiji-box-7 {
 	box-shadow: 0 0 80upx 18upx #FFFFFF, 0 0 100upx 30upx #224386;
+	animation-name: taiji-shine;
+	animation-duration: 3s;
+	animation-timing-function: linear;
+	animation-iteration-count: infinite;
+	animation-direction: alternate;
 }
 
-.ovHide {
-	overflow: hidden;
+@keyframes taiji-shine {
+	from {
+		box-shadow: 0 0 80upx 18upx #FFFFFF;
+	}
+
+	to {
+		box-shadow: 0 0 100upx 30upx #224386;
+	}
 }
 
 .spot-box {

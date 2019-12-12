@@ -183,12 +183,14 @@
 			console.log(systemInfo)
 			if (signType == 'assist') {
 				that.shakeSwitch('activityCheck');
-				let myShake = new Shake({
-					threshold: 5, // 摇动阈值
-					timeout: 500 // 默认两次事件间隔时间
-				});
-				myShake.start();
-				window.addEventListener('shake', that.shakeEventDidOccur, false)
+				setTimeout(() => {
+					let myShake = new Shake({
+						threshold: 5, // 摇动阈值
+						timeout: 500 // 默认两次事件间隔时间
+					});
+					myShake.start();
+					window.addEventListener('shake', that.shakeEventDidOccur, false)
+				}, 1000)
 			} else {
 				that.$store.dispatch("connectSocket")
 				uni.onSocketOpen(function(res) {

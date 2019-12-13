@@ -97,7 +97,7 @@
 									我对恒洁2020的祝福
 								</view>
 								<textarea class="danmu-ipt danmu-area" @blur="pageRestore" v-model="blessing" auto-height maxlength="-1" />
-							</view>
+								</view>
 							<view class="danmu-row">
 								<view class="sendMsg danmu-btn" @click="sendSocketMessage('blessing')">
 									点击提交
@@ -121,6 +121,7 @@
 
 <script>
 	import Shake from 'shake.js'
+	var graceChecker = require("@/common/graceChecker.js");
 	export default {
 		data() {
 			return {
@@ -245,29 +246,66 @@
 			},
 			sendSocketMessage(val) {
 				var that = this;
-				if (val == 'blessing') {
-					val = `blessing,${that.name},${that.city},${that.blessing}`;
-				}
-				var _msg = val || that.name;
-				console.log(_msg)
-				let _data = {
-					"msg": _msg
+				let _formData = {
+					"name": that.name,
+					"city": that.city,
+					"blessing": that.blessing
 				};
-				_data["fun"] = function() {
-					// that.up = true;
-					that.siginSucc = true;
-					that.paused = "running";
-					if (that.blessingState == 'off') {
-						that.blessingState = 'on';
-					}
-					// setTimeout(() => {
-					// 	that.up = false;
-					// 	//that.siginSucc = false;
-					// 	that.paused = "paused";
-					// }, 3000)
+				var rule = [{
+					name: "name",
+					checkType: "notnull",
+					checkRule: "",
+					errorMsg: "啊呀，您信息还未填写完整~"
+				}];
+				if (that.signType == 'danmu') {
+					var r = [{
+							name: "city",
+							checkType: "notnull",
+							checkRule: "",
+							errorMsg: "啊呀，您信息还未填写完整~"
+						},
+						{
+							name: "blessing",
+							checkType: "notnull",
+							checkRule: "",
+							errorMsg: "啊呀，您信息还未填写完整~"
+						}
+					];
+					rule=[...rule,...r];
 				}
-				console.log(_data);
-				that.$store.dispatch("sendSocketMessage", _data)
+				//进行表单检查
+				var checkRes = graceChecker.check(_formData, rule);
+				if (checkRes) {
+					if (val == 'blessing') {
+						val = `blessing,${that.name},${that.city},${that.blessing}`;
+					}
+					var _msg = val || that.name;
+					console.log(_msg)
+					let _data = {
+						"msg": _msg
+					};
+					_data["fun"] = function() {
+						// that.up = true;
+						that.siginSucc = true;
+						that.paused = "running";
+						if (that.blessingState == 'off') {
+							that.blessingState = 'on';
+						}
+						// setTimeout(() => {
+						// 	that.up = false;
+						// 	//that.siginSucc = false;
+						// 	that.paused = "paused";
+						// }, 3000)
+					}
+					console.log(_data);
+					that.$store.dispatch("sendSocketMessage", _data)
+				} else {
+					uni.showToast({
+						title: graceChecker.error,
+						icon: "none"
+					});
+				}
+
 			},
 			taijiOpen() {
 				var that = this;

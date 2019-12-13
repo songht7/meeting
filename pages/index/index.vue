@@ -94,10 +94,10 @@
 							</view>
 							<view class="danmu-row">
 								<view class="danmu-title">
-									我对恒洁2020的祝福
+									我对恒洁2020的寄语
 								</view>
 								<textarea class="danmu-ipt danmu-area" @blur="pageRestore" v-model="blessing" auto-height maxlength="-1" />
-								</view>
+							</view>
 							<view class="danmu-row">
 								<view class="sendMsg danmu-btn" @click="sendSocketMessage('blessing')">
 									点击提交
@@ -106,7 +106,7 @@
 						</block>
 						<block v-else>
 							<view class="blessingOn">
-								祝福已提交，感谢您的参与
+								寄语已送达，感谢您的参与
 							</view>
 						</block>
 					</view>
@@ -125,6 +125,8 @@
 	export default {
 		data() {
 			return {
+				mp3: "/static/shake.mp3",
+				shakeMp3: "",
 				siginBlockTop: 68,
 				screenHeight: "",
 				name: "", //签到姓名
@@ -184,6 +186,9 @@
 			console.log(systemInfo)
 			if (signType == 'assist') {
 				that.shakeSwitch('activityCheck');
+				const _shakeMp3 = uni.createInnerAudioContext();
+				that.shakeMp3 = _shakeMp3;
+				_shakeMp3.src = that.mp3;
 				setTimeout(() => {
 					let myShake = new Shake({
 						threshold: 5, // 摇动阈值
@@ -212,7 +217,7 @@
 		methods: {
 			shakeEventDidOccur() {
 				var that = this;
-				that.shakeSwitch('activityCheck');
+				//that.shakeSwitch('activityCheck');
 				if (!that.shakeSwitchState) {
 					return
 				}
@@ -243,6 +248,8 @@
 						that.assistState = true;
 					}, 1500);
 				}
+				var _shakeMp3 = that.shakeMp3;
+				_shakeMp3.play();
 			},
 			sendSocketMessage(val) {
 				var that = this;
@@ -271,7 +278,7 @@
 							errorMsg: "啊呀，您信息还未填写完整~"
 						}
 					];
-					rule=[...rule,...r];
+					rule = [...rule, ...r];
 				}
 				//进行表单检查
 				var checkRes = graceChecker.check(_formData, rule);

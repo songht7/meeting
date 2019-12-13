@@ -80,7 +80,7 @@ page {
 }
 
 .sigin-info-succ {
-	font-size: 42upx;
+	font-size: 40upx;
 	padding-top: 10upx;
 	animation-name: sigin-succ;
 	animation-duration: 2s;
@@ -459,7 +459,7 @@ uni-swiper-item {
 #AssistComming {
 	display: block;
 	width: 70%;
-	margin: 45% auto 0;
+	margin: 100upx auto 0;
 }
 
 .blessingOn {

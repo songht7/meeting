@@ -30,52 +30,52 @@
 					</view>
 				</block>
 				<block v-else-if="signType=='assist'">
-					<block v-if="shakeSwitchState">
-						<view class="circleProgress_wrapper">
-							<view class="taiji-box" :class="[assistState||ovHide?'ovHide':'',taijiBox]" @click="taijiOpen">
+					<view class="circleProgress_wrapper">
+						<view class="taiji-box" :class="[assistState||ovHide?'ovHide':'',taijiBox]" @click="taijiOpen">
+							<block v-if="shakeSwitchState">
 								<view class="spot-box" v-if="tjPlay=='paused'">
 									<image class="spot" src="../../static/spot.png" mode="aspectFit"></image>
 									<view class="spot-val">{{shakeSwitchState?'点击开启新品助力':'新品发布,敬请期待'}}</view>
 								</view>
-								<view class="taiji taiji-left" :style="{'animation-play-state':tjPlay}">
-									<img class="taiji-img taiji-img-left" src="../../static/taiji-left.png" />
-								</view>
-								<view class="taiji taiji-right" :style="{'animation-play-state':tjPlay}">
-									<img class="taiji-img taiji-img-right" src="../../static/taiji-right.png" />
-								</view>
-							</view>
-							<block v-if="shakeSwitchState">
-								<view class="pro-img" :class="{'new-pro':assistState}">
-									<image v-show="!assistState" class="pImg" :class="['pImg-'+proImg]" :src="'../../static/pro-'+proImg+'.png'"
-									 mode="aspectFit"></image>
-									<!-- autoplay="autoplay" -->
-									<swiper v-show="assistState" class="swiper-box" autoplay="autoplay" :indicator-dots="indicatorDots" circular="circular"
-									 interval="1000" duration="500">
-										<swiper-item v-for="pro in proSize" :key="pro">
-											<image class="pImg swiper-img" :src="'../../static/pros-'+pro+'.png'" mode="aspectFit"></image>
-										</swiper-item>
-									</swiper>
-								</view>
-								<view class="wrapper right">
-									<view class="circleProgress rightcircle" :style="{'transform':' rotate('+rotateRight+'deg)'}">
-									</view>
-								</view>
-								<view class="wrapper left">
-									<view class="circleProgress leftcircle" :style="{'transform':' rotate('+rotateLeft+'deg)'}">
-									</view>
-								</view>
 							</block>
-						</view>
-						<view class="shake-info" v-if="tjPlay=='running'&&!assistState" @click="shakeEventDidOccur">
-							<img src="../../static/shake.png" class="shake-img" alt="">
-							<view class="shake-ovs">
-								摇一摇，助力新品发布
+							<view class="taiji taiji-left" :style="{'animation-play-state':tjPlay}">
+								<img class="taiji-img taiji-img-left" src="../../static/taiji-left.png" />
+							</view>
+							<view class="taiji taiji-right" :style="{'animation-play-state':tjPlay}">
+								<img class="taiji-img taiji-img-right" src="../../static/taiji-right.png" />
 							</view>
 						</view>
-					</block>
-					<block v-else>
+						<block v-if="shakeSwitchState">
+							<view class="pro-img" :class="{'new-pro':assistState}">
+								<image v-show="!assistState" class="pImg" :class="['pImg-'+proImg]" :src="'../../static/pro-'+proImg+'.png'"
+								 mode="aspectFit"></image>
+								<!-- autoplay="autoplay" -->
+								<swiper v-show="assistState" class="swiper-box" autoplay="autoplay" :indicator-dots="indicatorDots" circular="circular"
+								 interval="1000" duration="500">
+									<swiper-item v-for="pro in proSize" :key="pro">
+										<image class="pImg swiper-img" :src="'../../static/pros-'+pro+'.png'" mode="aspectFit"></image>
+									</swiper-item>
+								</swiper>
+							</view>
+							<view class="wrapper right">
+								<view class="circleProgress rightcircle" :style="{'transform':' rotate('+rotateRight+'deg)'}">
+								</view>
+							</view>
+							<view class="wrapper left">
+								<view class="circleProgress leftcircle" :style="{'transform':' rotate('+rotateLeft+'deg)'}">
+								</view>
+							</view>
+						</block>
+					</view>
+					<block v-if="!shakeSwitchState">
 						<img src="../../static/commingsoon.png" id="AssistComming" alt="">
 					</block>
+					<view class="shake-info" v-if="tjPlay=='running'&&!assistState" @click="shakeEventDidOccur">
+						<img src="../../static/shake.png" class="shake-img" alt="">
+						<view class="shake-ovs">
+							摇一摇，助力新品发布
+						</view>
+					</view>
 				</block>
 				<block v-else-if="signType=='danmu'">
 					<view class="danmu-box">

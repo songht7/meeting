@@ -9,12 +9,14 @@ var api = {
 		"wsUrl": "ws://socket.wsshanghai.com:12345", //服务器地址 
 		"ajUrl": "http://socket.wsshanghai.com", //服务器地址 开关
 		"ajUrlb": "https://socketb.wsshanghai.com", //服务器地址 开关
+		"apiUrl": "http://api-head.wsshanghai.com",
 		"appName": "年会"
 	},
 	"dev": {
 		"wsUrl": "ws://socket.wsshanghai.com:12345", //服务器地址
 		"ajUrl": "http://socket.wsshanghai.com", //服务器地址 开关
 		"ajUrlb": "https://socketb.wsshanghai.com", //服务器地址 开关 https的话用socketb
+		"apiUrl": "http://api-head.wsshanghai.com",
 		"appName": "年会"
 	}
 }
@@ -26,10 +28,13 @@ export default {
 		"ajUrl": api[lks]["ajUrl"],
 		"ajUrlb": api[lks]["ajUrlb"],
 		"appName": api[lks]["appName"],
+		"apiUrl": api[lks]["apiUrl"],
 		"addr": {
 			"activityCheck": '/activityCheck.htm',
 			"activityStart": '/activityStart.htm',
-			"activityStop": '/activityStop.htm'
+			"activityStop": '/activityStop.htm',
+
+			"SiteInfomation": "/v5/SiteInfomation-add.htm"//数据接口->apiUrl
 		}
 	}
 }

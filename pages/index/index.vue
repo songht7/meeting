@@ -97,7 +97,7 @@
 									我对恒洁2020的寄语
 								</view>
 								<textarea class="danmu-ipt danmu-area" @blur="pageRestore" v-model="blessing" auto-height maxlength="-1" />
-							</view>
+								</view>
 							<view class="danmu-row">
 								<view class="sendMsg danmu-btn" @click="sendSocketMessage('blessing')">
 									点击提交
@@ -283,21 +283,45 @@
 				//进行表单检查
 				var checkRes = val == 'space_close' ? true : graceChecker.check(_formData, rule);
 				if (checkRes) {
-					if (val == 'blessing') {
-						val = `blessing,${that.name},${that.city},${that.blessing}`;
-					}
-					var _msg = val || that.name;
-					console.log(_msg)
-					let _data = {
-						"msg": _msg
-					};
-					_data["fun"] = function() {
-						// that.up = true;
-						that.siginSucc = true;
-						that.paused = "running";
-						if (that.blessingState == 'off') {
-							that.blessingState = 'on';
+					var _data = {};
+					var fun = "sendSocketMessage";
+					if (val == 'blessing') { //寄语
+						//val = `blessing,${that.name},${that.city},${that.blessing}`;
+						fun = "getData";
+						_data = {
+							"intUrl": "apiUrl",
+							"inter": "SiteInfomation",
+							"method":"POST",
+							"data": {
+								"name": that.name,
+								"value": that.blessing,
+								"city": that.city,
+								"enterprise_id": "3",
+							}
 						}
+					} else { //签到
+						_data = {
+							"msg": that.name
+						};
+					}
+					_data["fun"] = function(res) {
+						// that.up = true;
+						console.log(res);
+						if (res.type && res.type == 'socket') {
+							if(res.result){
+								that.siginSucc = true;
+							}else{
+								uni.showToast({
+									title: "签到异常，请尝试刷新页面",
+									icon: "none"
+								});
+							}
+						} else if (res.success) {
+							if (that.blessingState == 'off') {
+								that.blessingState = 'on';
+							}
+						}
+						that.paused = "running";
 						// setTimeout(() => {
 						// 	that.up = false;
 						// 	//that.siginSucc = false;
@@ -305,7 +329,7 @@
 						// }, 3000)
 					}
 					console.log(_data);
-					that.$store.dispatch("sendSocketMessage", _data)
+					that.$store.dispatch(fun, _data)
 				} else {
 					uni.showToast({
 						title: graceChecker.error,

@@ -107,11 +107,23 @@ const store = new Vuex.Store({
 				console.log('WebSocket连接打开失败，请检查！');
 			});
 			if (ctx.state.socketOpen) {
-				if (parm.fun) {
-					new parm.fun()
+				var res = {
+					"result": "",
+					"type": "socket"
 				}
 				uni.sendSocketMessage({
-					data: parm.msg
+					data: parm.msg,
+					success() {
+						res["result"] = 1;
+					},
+					fail() {
+						res["result"] = 0;
+					},
+					complete() {
+						if (parm.fun) {
+							new parm.fun(res)
+						}
+					}
 				});
 			} else {
 				console.log("服务器链接异常")

@@ -9,14 +9,14 @@ var api = {
 		"wsUrl": "ws://socket.wsshanghai.com:12345", //服务器地址 
 		"ajUrl": "http://socket.wsshanghai.com", //服务器地址 开关
 		"ajUrlb": "https://socketb.wsshanghai.com", //服务器地址 开关
-		"apiUrl": "http://api-head.wsshanghai.com",
+		"apiUrl": "http://api-head.wsshanghai.com",//数据接口->apiUrl
 		"appName": "年会"
 	},
 	"dev": {
 		"wsUrl": "ws://socket.wsshanghai.com:12345", //服务器地址
 		"ajUrl": "http://socket.wsshanghai.com", //服务器地址 开关
 		"ajUrlb": "https://socketb.wsshanghai.com", //服务器地址 开关 https的话用socketb
-		"apiUrl": "http://api-head.wsshanghai.com",
+		"apiUrl": "http://api-head.wsshanghai.com",//数据接口->apiUrl
 		"appName": "年会"
 	}
 }

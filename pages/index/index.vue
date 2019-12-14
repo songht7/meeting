@@ -97,7 +97,7 @@
 									我对恒洁2020的寄语
 								</view>
 								<textarea class="danmu-ipt danmu-area" @blur="pageRestore" v-model="blessing" auto-height maxlength="-1" />
-								</view>
+							</view>
 							<view class="danmu-row">
 								<view class="sendMsg danmu-btn" @click="sendSocketMessage('blessing')">
 									点击提交
@@ -286,12 +286,12 @@
 					var _data = {};
 					var fun = "sendSocketMessage";
 					if (val == 'blessing') { //寄语
-						//val = `blessing,${that.name},${that.city},${that.blessing}`;
+						//var socketBlessing = `blessing,${that.name},${that.city},${that.blessing}`;
 						fun = "getData";
 						_data = {
 							"intUrl": "apiUrl",
 							"inter": "SiteInfomation",
-							"method":"POST",
+							"method": "POST",
 							"data": {
 								"name": that.name,
 								"value": that.blessing,
@@ -308,9 +308,9 @@
 						// that.up = true;
 						console.log(res);
 						if (res.type && res.type == 'socket') {
-							if(res.result){
+							if (res.result) {
 								that.siginSucc = true;
-							}else{
+							} else {
 								uni.showToast({
 									title: "签到异常，请尝试刷新页面",
 									icon: "none"

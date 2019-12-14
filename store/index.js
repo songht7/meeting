@@ -126,6 +126,7 @@ const store = new Vuex.Store({
 					}
 				});
 			} else {
+				ctx.state.socketErr = "同步连接异常，请刷新页面...";
 				console.log("服务器链接异常")
 			}
 		},

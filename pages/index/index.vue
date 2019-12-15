@@ -147,7 +147,8 @@
 				indicatorDots: false,
 				ovHide: false,
 				shakeSwitchState: false, //助力摇一摇是否开启
-				blessingState: ""
+				blessingState: "",
+				enterprise_id: "4" //指定后台账户ID号
 			}
 		},
 		onLoad(option) {
@@ -296,7 +297,7 @@
 								"name": that.name,
 								"value": that.blessing,
 								"city": that.city,
-								"enterprise_id": "3",
+								"enterprise_id": that.enterprise_id,
 							}
 						}
 					} else { //签到

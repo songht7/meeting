@@ -34,7 +34,8 @@ export default {
 			"activityStart": '/activityStart.htm',
 			"activityStop": '/activityStop.htm',
 
-			"SiteInfomation": "/v5/SiteInfomation-add.htm"//数据接口->apiUrl
+			"SiteInfomation": "/v5/SiteInfomation-add.htm",//寄语 数据接口->apiUrl
+			"SiteSign": "/v5/Sign-add.htm"//签到 数据接口->apiUrl
 		}
 	}
 }

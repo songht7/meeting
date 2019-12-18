@@ -69,7 +69,7 @@ const store = new Vuex.Store({
 					return {};
 				},
 				header: {
-					'content-type': 'application/json;charset=utf-8'
+					'content-type': 'text/html;charset=utf-8'
 				},
 				method: 'GET',
 				success(res) {
@@ -103,34 +103,44 @@ const store = new Vuex.Store({
 			});
 		},
 		sendSocketMessage(ctx, parm) {
+			let _url = ctx.state.interface.wsUrl;
+			uni.connectSocket({
+				url: _url,
+				data() {
+					return {};
+				},
+				header: {
+					'content-type': 'text/html;charset=utf-8'
+				},
+				method: 'GET',
+				success(res) {},
+				fail(err) {}
+			});
 			uni.onSocketError(function(res) {
 				ctx.state.socketErr = "同步连接异常，请刷新页面...";
 				ctx.dispatch("connectSocket");
 				console.log('WebSocket连接打开失败，请检查！');
 			});
-			if (ctx.state.socketOpen) {
-				var res = {
+			uni.onSocketOpen(function(res) {
+				var resss = {
 					"result": "",
 					"type": "socket"
 				}
 				uni.sendSocketMessage({
 					data: parm.msg,
 					success() {
-						res["result"] = 1;
+						resss["result"] = 1;
 					},
 					fail() {
-						res["result"] = 0;
+						resss["result"] = 0;
 					},
 					complete() {
 						if (parm.fun) {
-							new parm.fun(res)
+							new parm.fun(resss)
 						}
 					}
 				});
-			} else {
-				ctx.state.socketErr = "同步连接异常，请刷新页面...";
-				console.log("服务器链接异常")
-			}
+			});
 		},
 		closeSocket(ctx) {
 			uni.closeSocket({

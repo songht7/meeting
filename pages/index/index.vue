@@ -29,7 +29,7 @@
 						</view>
 					</view>
 				</block>
-				<block v-else-if="signType=='assist'">
+				<block v-if="signType=='assist'">
 					<block v-if="shakeSwitchState">
 						<view class="circleProgress_wrapper">
 							<view class="taiji-box" :class="[assistState||ovHide?'ovHide':'',taijiBox]" @click="taijiOpen">
@@ -77,7 +77,7 @@
 						<img src="../../static/commingsoon.png" id="AssistComming" alt="">
 					</block>
 				</block>
-				<block v-else-if="signType=='danmu'">
+				<block v-if="signType=='danmu'">
 					<view class="danmu-box">
 						<block v-if="blessingState!='on'">
 							<view class="danmu-row row-helf">
@@ -148,7 +148,8 @@
 				ovHide: false,
 				shakeSwitchState: false, //助力摇一摇是否开启
 				blessingState: "",
-				enterprise_id: "4" //指定后台账户ID号
+				enterprise_id: "4", //指定后台账户ID号
+				getDataType: 'api' //接受、发送数据方式api，socket
 			}
 		},
 		onLoad(option) {
@@ -199,19 +200,30 @@
 					window.addEventListener('shake', that.shakeEventDidOccur, false)
 				}, 2000)
 			} else {
-				that.$store.dispatch("connectSocket")
-				uni.onSocketOpen(function(res) {
-					console.log('WebSocket连接已打开！');
-					that.$store.state.socketErr = "";
-				});
+				var _getDataType = that.getDataType;
+				if (_getDataType == 'socket') {
+					that.$store.dispatch("connectSocket")
+					uni.onSocketOpen(function(res) {
+						console.log('WebSocket连接已打开！');
+						that.$store.state.socketErr = "";
+					});
+				}
 			}
 		},
 		onReady() {},
 		onHide() {
-			this.sendSocketMessage('space_close')
+			var that = this;
+			var _getDataType = that.getDataType;
+			if (_getDataType == 'socket') {
+				this.sendSocketMessage('space_close')
+			}
 		},
 		onUnload() {
-			this.sendSocketMessage('space_close')
+			var that = this;
+			var _getDataType = that.getDataType;
+			if (_getDataType == 'socket') {
+				this.sendSocketMessage('space_close')
+			}
 		},
 		components: {},
 		computed: {},
@@ -254,6 +266,7 @@
 			},
 			sendSocketMessage(val) {
 				var that = this;
+				var _getDataType = that.getDataType;
 				let _formData = {
 					"name": that.name,
 					"city": that.city,
@@ -301,9 +314,22 @@
 							}
 						}
 					} else { //签到
-						_data = {
-							"msg": that.name
-						};
+						if (_getDataType == 'socket') { //socket 传送
+							_data = {
+								"msg": that.name
+							};
+						} else { //api 传送
+							fun = "getData";
+							_data = {
+								"intUrl": "apiUrl",
+								"inter": "SiteSign",
+								"method": "POST",
+								"data": {
+									"name": that.name,
+									"enterprise_id": that.enterprise_id,
+								}
+							}
+						}
 					}
 					_data["fun"] = function(res) {
 						// that.up = true;
@@ -318,9 +344,20 @@
 								});
 							}
 						} else if (res.success) {
-							if (that.blessingState == 'off') {
-								that.blessingState = 'on';
+							var _signType = that.signType;
+							console.log(_signType)
+							if (_signType == 'sign') {
+								that.siginSucc = true;
+							} else if (_signType == 'danmu') {
+								if (that.blessingState == 'off') {
+									that.blessingState = 'on';
+								}
 							}
+						} else {
+							uni.showToast({
+								title: "提交失败",
+								icon: "none"
+							});
 						}
 						that.paused = "running";
 						// setTimeout(() => {

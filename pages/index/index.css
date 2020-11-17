@@ -489,3 +489,17 @@ uni-swiper-item {
 	left: auto;
 	right: 0;
 }
+
+
+/** 2021 **/
+.recorder-btn {
+	border: 1px solid #FFFFFF;
+	color: #FFFFFF;
+	line-height: 3;
+	display: flex;
+	justify-content:center;
+	text-align: center;
+	border-radius: 10rpx;
+	align-items: center;
+	align-content: center;
+}

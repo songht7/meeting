@@ -32,7 +32,18 @@
 				<block v-if="signType=='assist'">
 					<block v-if="shakeSwitchState">
 						<view class="active-main">
-							123
+							<view class="recorder-box">
+								<!-- <audio style="text-align: left" :src="blob" controls></audio> -->
+								<view class="recorder-btn" @click="Recordingbtn=='开始录音'?startRecording():stopRecording()">
+									{{Recordingbtn}}
+								</view>
+								<view class="recorder-btn" @click="recorderPlay">
+									播放
+								</view>
+								<view class="recorder-btn" @click="download">
+									下载
+								</view>
+							</view>
 						</view>
 					</block>
 					<block v-else>
@@ -77,12 +88,32 @@
 
 <script>
 	import Shake from 'shake.js'
-	import Recorder from 'recorder-js';
-	const audioContext = new(window.AudioContext || window.webkitAudioContext)();
+	import Recorder from 'js-audio-recorder';//https://blog.csdn.net/weixin_43088706/article/details/104000600
+	let recorder = new Recorder({
+		type: "wav", //此处的type类型是可修改的
+		bitRate: 16,
+		sampleRate: 16000,
+		bufferSize: 8192,
+	});
+	// import Recorder from 'recorder-js';
+	/*recorder.js*/
+	// const audioContext = new(window.AudioContext || window.webkitAudioContext)();
+	// const recorder = new Recorder(audioContext, {
+	// 	onAnalysed: data => {
+	// 		// console.log("recorder data",data)
+	// 	}
+	// });
+	// navigator.mediaDevices.getUserMedia({
+	// 		audio: true
+	// 	})
+	// 	.then(stream => {
+	// 		recorder.init(stream);
+	// 		console.log('初始化完成');
+	// 	})
+	// 	.catch(err => console.log('Uh oh... unable to get stream...', err));
+	// console.log("recorder:", recorder)
+	/*recorder.js*/
 
-
-	let isRecording = false;
-	let blob = null;
 
 	var graceChecker = require("@/common/graceChecker.js");
 	export default {
@@ -112,7 +143,10 @@
 				shakeSwitchState: false, //助力摇一摇是否开启
 				blessingState: "",
 				enterprise_id: "4", //指定后台账户ID号
-				getDataType: 'api' //接受、发送数据方式api，socket
+				getDataType: 'api', //接受、发送数据方式api，socket
+				isRecording: false,
+				blob: null,
+				Recordingbtn: "开始录音",
 			}
 		},
 		onLoad(option) {
@@ -137,21 +171,6 @@
 			uni.setNavigationBarTitle({
 				title: _title
 			});
-			/*recorder.js*/
-			const recorder = new Recorder(audioContext, {
-				onAnalysed: data => console.log(data),
-				success: function(success) { //成功回调函数
-					// start.disabled = false;
-					console.log("recorder-js-success:", success)
-				},
-				error: function(msg) { //失败回调函数
-					console.log("recorder-js-error:", msg);
-				},
-				fix: function(msg) { //不支持H5录音回调函数
-					console.log("recorder-js-fix:", msg);
-				}
-			});
-			/*recorder.js*/
 		},
 		onShow() {
 			var that = this;
@@ -337,6 +356,46 @@
 					scrollTop: 0,
 					duration: 0
 				})
+			},
+			startRecording() {
+				var that = this;
+				recorder.start();
+				that.isRecording = true;
+				that.Recordingbtn = "保存录音";
+				// recorder.start().then(() => {
+				// 	console.log("startRecording")
+				// 	that.isRecording = true;
+				// 	that.Recordingbtn = "保存录音";
+				// 	// that.stopRecording()
+				// });
+			},
+			stopRecording() {
+				var that = this;
+				recorder.stop();
+				that.isRecording = false;
+				that.Recordingbtn = "开始录音";
+				// recorder.stop().then(({
+				// 	blob,
+				// 	buffer
+				// }) => {
+				// 	console.log("stopRecording")
+				// 	that.Recordingbtn = "开始录音";
+				// 	that.isRecording = false;
+				// 	that.blob = blob;
+				// 	console.log("blob:", blob)
+				// 	// buffer is an AudioBuffer
+				// });
+			},
+			recorderPlay(){
+				recorder.play();
+			},
+			download() {
+				recorder.downloadWAV();
+				// let formData = new FormData();
+				// formData.append("type", "20");
+				// formData.append("file", blob, "file.wav");
+				// console.log("download", formData)
+				// Recorder.download(blob, 'my-audio-file'); // downloads a .wav file
 			}
 		}
 	}

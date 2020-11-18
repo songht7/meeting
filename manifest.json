@@ -74,6 +74,7 @@
     "h5" : {
         "router" : {
             "base" : ""
-        }
+        },
+        "domain" : "sign.bdmartech.com"
     }
 }

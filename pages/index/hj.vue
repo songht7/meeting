@@ -34,15 +34,23 @@
 						<view class="active-main">
 							<view class="recorder-box">
 								<!-- <audio style="text-align: left" :src="blob" controls></audio> -->
-								<view class="recorder-btn" @click="Recordingbtn=='开始录音'?startRecording():stopRecording()">
+								<view class="recorder-btn" @click="recorderPlay" @longpress="startRecording" @touchend="stopRecording">
 									{{Recordingbtn}}
 								</view>
-								<view class="recorder-btn" @click="recorderPlay">
-									播放
-								</view>
-								<view class="recorder-btn" @click="download">
-									下载
-								</view>
+								<block v-if="recorderDuration>0">
+									<!-- <view class="recorder-btn" @click="recorderPlay">
+										播放
+									</view> -->
+									<view class="recorder-btn" @click="uploadRecorder">
+										发送
+									</view>
+									<view class="recorder-btn" @click="recorderDestroy">
+										取消
+									</view>
+									<!-- <view class="recorder-btn" @click="download">
+										下载
+									</view> -->
+								</block>
 							</view>
 						</view>
 					</block>
@@ -88,13 +96,8 @@
 
 <script>
 	import Shake from 'shake.js'
-	import Recorder from 'js-audio-recorder';//https://blog.csdn.net/weixin_43088706/article/details/104000600
-	let recorder = new Recorder({
-		type: "wav", //此处的type类型是可修改的
-		bitRate: 16,
-		sampleRate: 16000,
-		bufferSize: 8192,
-	});
+	import Recorder from 'js-audio-recorder'; //https://blog.csdn.net/weixin_43088706/article/details/104000600
+	let recorder = null;
 	// import Recorder from 'recorder-js';
 	/*recorder.js*/
 	// const audioContext = new(window.AudioContext || window.webkitAudioContext)();
@@ -124,6 +127,7 @@
 				shakeMp3: "",
 				siginBlockTop: 68,
 				screenHeight: "",
+				user: "",
 				name: "", //签到姓名
 				city: "", //所属城市
 				up: false,
@@ -146,7 +150,9 @@
 				getDataType: 'api', //接受、发送数据方式api，socket
 				isRecording: false,
 				blob: null,
-				Recordingbtn: "开始录音",
+				Recordingbtn: "长按录音", //音频状态
+				recorderDuration: 0, //音频时长
+				audio: null //录完的音频
 			}
 		},
 		onLoad(option) {
@@ -171,6 +177,12 @@
 			uni.setNavigationBarTitle({
 				title: _title
 			});
+			uni.getStorage({
+				key: 'hj-user',
+				success: function(res) {
+					that.user = res.data;
+				}
+			});
 		},
 		onShow() {
 			var that = this;
@@ -187,6 +199,12 @@
 			console.log(systemInfo)
 			if (signType == 'assist') {
 				that.shakeSwitch('activityCheck');
+				recorder = new Recorder({
+					type: "mp3", //此处的type类型是可修改的
+					// bitRate: 16,
+					// sampleRate: 16000,
+					// bufferSize: 8192,
+				});
 
 			} else if (signType == 'danmu') {
 				// navigator.mediaDevices.getUserMedia({
@@ -210,16 +228,17 @@
 			var that = this;
 			var _getDataType = that.getDataType;
 			if (_getDataType == 'socket') {
-				this.sendSocketMessage('space_close')
+				that.sendSocketMessage('space_close')
 			}
+			that.recorderDestroy()
 		},
 		onUnload() {
 			var that = this;
-			var that = this;
 			var _getDataType = that.getDataType;
 			if (_getDataType == 'socket') {
-				this.sendSocketMessage('space_close')
+				that.sendSocketMessage('space_close')
 			}
+			that.recorderDestroy()
 		},
 		components: {},
 		computed: {},
@@ -293,6 +312,11 @@
 							console.log(_signType)
 							if (_signType == 'sign') {
 								that.siginSucc = true;
+								uni.setStorage({
+									key: 'hj-user',
+									data: that.name,
+									success: function() {}
+								});
 							} else if (_signType == 'danmu') {
 								if (that.blessingState == 'off') {
 									that.blessingState = 'on';
@@ -361,7 +385,7 @@
 				var that = this;
 				recorder.start();
 				that.isRecording = true;
-				that.Recordingbtn = "保存录音";
+				that.Recordingbtn = "松开保存";
 				// recorder.start().then(() => {
 				// 	console.log("startRecording")
 				// 	that.isRecording = true;
@@ -373,7 +397,21 @@
 				var that = this;
 				recorder.stop();
 				that.isRecording = false;
-				that.Recordingbtn = "开始录音";
+				that.Recordingbtn = "长按录音";
+				that.recorderDuration = recorder.duration;
+				that.audio = recorder.getWAVBlob(); //recorder.getPCMBlob();
+
+				console.log(recorder.duration);
+
+				/**测试blob**/
+				// var audio = document.createElement("audio");
+				// audio.controls = true;
+				// document.body.appendChild(audio);
+				// //非常简单的就能拿到blob音频url
+				// audio.src = URL.createObjectURL(that.audio);
+				// audio.play();
+				/**测试blob**/
+				
 				// recorder.stop().then(({
 				// 	blob,
 				// 	buffer
@@ -386,8 +424,29 @@
 				// 	// buffer is an AudioBuffer
 				// });
 			},
-			recorderPlay(){
+			recorderPlay() {
 				recorder.play();
+			},
+			uploadRecorder() {
+				var that = this;
+				console.log("audio:", that.audio)
+				if (that.recorderDuration) {
+					var form = new FormData();
+					let user = that.user ? that.user : 'HEGII';
+					form.append("upfile", that.audio, "HEGII.mp3");
+					console.log("form:", form)
+					uni.uploadFile({
+						url: 'https://www.example.com/upload', //仅为示例，非真实的接口地址
+						filePath: that.audio,
+						name: 'file',
+						formData: {
+							'user': user
+						},
+						success: (uploadFileRes) => {
+							console.log(uploadFileRes.data);
+						}
+					});
+				}
 			},
 			download() {
 				recorder.downloadWAV();
@@ -396,7 +455,16 @@
 				// formData.append("file", blob, "file.wav");
 				// console.log("download", formData)
 				// Recorder.download(blob, 'my-audio-file'); // downloads a .wav file
-			}
+			},
+			recorderDestroy() {
+				if (recorder) {
+					let fn = function(e) {
+						console.log("recorderDestroy")
+					}
+					recorder.destroy(fn);
+					recorder = null;
+				}
+			},
 		}
 	}
 </script>

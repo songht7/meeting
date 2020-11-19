@@ -492,14 +492,59 @@ uni-swiper-item {
 
 
 /** 2021 **/
+
 .recorder-btn {
-	border: 1px solid #FFFFFF;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	text-align: center;
+	align-items: center;
+	align-content: center;
+}
+
+.recorder-info {
+	display: flex;
+	justify-content: center;
+	text-align: center;
+	align-items: center;
+	align-content: center;
 	color: #FFFFFF;
 	line-height: 3;
+}
+
+.form-btn {
+	width: 70%;
+	border: 1px solid #FFFFFF;
 	display: flex;
-	justify-content:center;
+	justify-content: center;
 	text-align: center;
 	border-radius: 10rpx;
 	align-items: center;
 	align-content: center;
+	color: #FFFFFF;
+	line-height: 3;
+}
+
+.recorder-row {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	text-align: center;
+	border-radius: 10rpx;
+	align-items: center;
+	align-content: center;
+	margin-bottom: 25rpx;
+}
+
+.recorder-input {
+	border: 2px solid #F0AD4E;
+	color: #F0AD4E;
+	border-radius: 10rpx;
+	width:60%;
+	line-height: 2;
+	padding: 30rpx 10rpx;
+}
+
+.placeholder-style {
+	color: #F0AD4E;
 }

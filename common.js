@@ -10,14 +10,26 @@ var api = {
 		"ajUrl": "http://socket.wsshanghai.com", //服务器地址 开关
 		"ajUrlb": "https://socketb.wsshanghai.com", //服务器地址 开关
 		"apiUrl": "http://api-head.wsshanghai.com",//数据接口->apiUrl
-		"appName": "年会"
+		"appName": "年会",
+		"cosConfig": { //`https://plbs-test-1257286922.cos.ap-shanghai.myqcloud.com/...`
+			"Bucket": 'plbs-test-1257286922',
+			"Region": 'ap-shanghai',
+			"SecretId": '',
+			"SecretKey": ''
+		},
 	},
 	"dev": {
 		"wsUrl": "ws://socket.wsshanghai.com:12345", //服务器地址
 		"ajUrl": "http://socket.wsshanghai.com", //服务器地址 开关
 		"ajUrlb": "https://socketb.wsshanghai.com", //服务器地址 开关 https的话用socketb
 		"apiUrl": "http://api-head.wsshanghai.com",//数据接口->apiUrl
-		"appName": "年会"
+		"appName": "年会",
+		"cosConfig": { //`http://plbs-test-1257286922.cos.ap-shanghai.myqcloud.com/...`
+			"Bucket": 'plbs-test-1257286922',
+			"Region": 'ap-shanghai',
+			"SecretId": 'AKIDXt0yjgKr41jBMK7YrunRpztscbJe4W2J',
+			"SKey": 'RUJzSjJXbW5iZ1c2WDNLTDVacXJjOWo0OUc4b05na2s='
+		},
 	}
 }
 var lks = "dev";
@@ -29,6 +41,7 @@ export default {
 		"ajUrlb": api[lks]["ajUrlb"],
 		"appName": api[lks]["appName"],
 		"apiUrl": api[lks]["apiUrl"],
+		"cosConfig": api[lks]["cosConfig"],
 		"addr": {
 			"activityCheck": '/activityCheck.htm',
 			"activityStart": '/activityStart.htm',

@@ -34,20 +34,29 @@
 						<view class="active-main">
 							<view class="recorder-box">
 								<!-- <audio style="text-align: left" :src="blob" controls></audio> -->
-								<view class="recorder-btn" @click="recorderPlay" @longpress="startRecording" @touchend="stopRecording">
+								<image src="../../static/2021/1.jpg" mode="aspectFill" class="recorder-btn" @click="recorderPlay" @longpress="startRecording"
+								 @touchend="stopRecording"></image>
+								<view class="recorder-info">
 									{{Recordingbtn}}
 								</view>
-								<block v-if="recorderDuration>0">
+								<view class="recorder-row">
+									<input class="recorder-input" type="text" v-model="user" placeholder="请填写姓名" placeholder-class="placeholder-style" />
+								</view>
+								<sunui-upimg-tencent :upImgConfig="upImgCos" @onUpImg="upCosData" @onImgDel="delImgInfo" ref="uImage"></sunui-upimg-tencent>
+								<!-- <button type="primary" @tap="uAudioTap">发送</button> -->
+								<block v-if="recorderDuration>0&&user!=''">
 									<!-- <view class="recorder-btn" @click="recorderPlay">
 										播放
 									</view> -->
-									<view class="recorder-btn" @click="uploadRecorder">
-										发送
+									<view class="recorder-row">
+										<view class="form-btn" @click="uploadRecorder">
+											发送
+										</view>
 									</view>
-									<view class="recorder-btn" @click="recorderDestroy">
+									<!-- <view class="recorder-btn" @click="recorderDestroy">
 										取消
 									</view>
-									<!-- <view class="recorder-btn" @click="download">
+									<view class="recorder-btn" @click="download">
 										下载
 									</view> -->
 								</block>
@@ -95,6 +104,9 @@
 </template>
 
 <script>
+	import TcVod from 'vod-js-sdk-v6'
+	let tcVod = "";
+
 	import Shake from 'shake.js'
 	import Recorder from 'js-audio-recorder'; //https://blog.csdn.net/weixin_43088706/article/details/104000600
 	let recorder = null;
@@ -118,11 +130,12 @@
 	/*recorder.js*/
 
 
+	import sunuiUpimgTencent from '@/components/sunui-upimg/sunui-upimg-tencent.vue'
 	var graceChecker = require("@/common/graceChecker.js");
 	export default {
 		data() {
 			return {
-				active: "", //测试用活动是否开启 ac：on off，正式需为空
+				active: "", //测试用活动是否开启 ac：on off，正式需为空 
 				mp3: "/static/shake.mp3",
 				shakeMp3: "",
 				siginBlockTop: 68,
@@ -152,7 +165,29 @@
 				blob: null,
 				Recordingbtn: "长按录音", //音频状态
 				recorderDuration: 0, //音频时长
-				audio: null //录完的音频
+				audio: null, //录完的音频
+				cosFlag: true,
+				cosArr: [],
+				upImgCos: {
+					cosConfig: this.$store.state.cosConfig,
+					// 是否开启notli(开启的话就是选择完直接上传，关闭的话当count满足数量时才上传)
+					notli: false,
+					// 图片数量
+					count: 1,
+					// 上传图片背景修改 
+					upBgColor: '#E8A400',
+					// 上传icon图标颜色修改(仅限于iconfont)
+					upIconColor: '#eee',
+					// 上传svg图标名称
+					upSvgIconName: 'icon-certificate',
+					//是否压缩上传照片(仅小程序生效)
+					sizeType: true,
+					//相机来源(相机->camera,相册->album,两者都有->all,默认all)
+					sourceType: "all",
+					path: `user_path/hengjie/`,
+					audioKey: "user_path/hegii/",
+					photoType: "hj-"
+				}
 			}
 		},
 		onLoad(option) {
@@ -183,6 +218,11 @@
 					that.user = res.data;
 				}
 			});
+			tcVod = new TcVod({
+				getSignature: function(res) {
+					return that.$store.state.cosConfig
+				}
+			})
 		},
 		onShow() {
 			var that = this;
@@ -197,15 +237,17 @@
 				that.siginBlockTop = 65;
 			}
 			console.log(systemInfo)
+
 			if (signType == 'assist') {
 				that.shakeSwitch('activityCheck');
+				/* Recorder实例化*/
 				recorder = new Recorder({
 					type: "mp3", //此处的type类型是可修改的
 					// bitRate: 16,
 					// sampleRate: 16000,
 					// bufferSize: 8192,
 				});
-
+				/* Recorder实例化*/
 			} else if (signType == 'danmu') {
 				// navigator.mediaDevices.getUserMedia({
 				// 		audio: true
@@ -240,7 +282,9 @@
 			}
 			that.recorderDestroy()
 		},
-		components: {},
+		components: {
+			sunuiUpimgTencent
+		},
 		computed: {},
 		methods: {
 			sendSocketMessage(val) {
@@ -398,20 +442,43 @@
 				recorder.stop();
 				that.isRecording = false;
 				that.Recordingbtn = "长按录音";
-				that.recorderDuration = recorder.duration;
-				that.audio = recorder.getWAVBlob(); //recorder.getPCMBlob();
+				let duration = recorder.duration;
 
 				console.log(recorder.duration);
+				if (duration > 0) {
+					that.recorderDuration = recorder.duration;
+					let Blob = recorder.getWAVBlob(); //recorder.getPCMBlob();
+					that.audio = Blob;
+					console.log("Blob:", Blob)
+					/****Blob转base64***/
+					// that.blobToDataURL(Blob, function(e) {//
+					// 	console.log("blobToDataURL:", e)
+					// 	// let ccc = that.dataURLtoBlob(e);
+					// 	// console.log("ccc:", ccc)
+					// });
+					/****Blob转base64***/
+
+					/****tcVod***/
+					that.blobToFile(Blob);
+					/****tcVod***/
+
+
+				} else {
+					uni.showToast({
+						title: `录音失败`,
+						icon: 'none'
+					});
+				}
 
 				/**测试blob**/
 				// var audio = document.createElement("audio");
 				// audio.controls = true;
-				// document.body.appendChild(audio);
+				// document.body.appendChild(audio);audio 
 				// //非常简单的就能拿到blob音频url
 				// audio.src = URL.createObjectURL(that.audio);
 				// audio.play();
 				/**测试blob**/
-				
+
 				// recorder.stop().then(({
 				// 	blob,
 				// 	buffer
@@ -424,6 +491,68 @@
 				// 	// buffer is an AudioBuffer
 				// });
 			},
+			blobToDataURL(blob, callback) { //Blob转base64
+				let a = new FileReader();
+				a.onload = function(e) {
+					callback(e.target.result);
+				}
+				a.readAsDataURL(blob);
+			},
+			dataURLtoBlob(dataurl) { //base64转Blob
+				var arr = dataurl.split(','),
+					mime = arr[0].match(/:(.*?);/)[1],
+					bstr = atob(arr[1]),
+					n = bstr.length,
+					u8arr = new Uint8Array(n);
+				while (n--) {
+					u8arr[n] = bstr.charCodeAt(n);
+				}
+				return new Blob([u8arr], {
+					type: mime
+				});
+			},
+			blobToFile(blob) {
+				var that = this;
+				let blobURL = URL.createObjectURL(blob)
+				// Recorder.download(blob, 'my-audio-file'); // downloads a .wav file
+
+				var file = {};
+				var xhr = new XMLHttpRequest();
+				xhr.open('GET', blobURL, true);
+				xhr.responseType = 'blob';
+				xhr.onload = function(e) {
+					if (this.status == 200) {
+
+						// var fd = new FormData();
+						// fd.append('fname', 'hj.wav');
+						// fd.append('data', blob);
+
+						file.file = this.response;
+						file.name = "audio.mp3";
+						file.size = this.response.size; //getYourBlobSize();
+						file.type = this.response.type;
+						// console.log("eeee:", file);
+						that.$refs.uImage.setData(this.response);
+						that.uAudioTap();
+						// uploadAudioBlobs(file);
+					}
+				};
+				xhr.send();
+
+				// const uploader = tcVod.upload({
+				// 	mediaFile: file, // 媒体文件（视频或音频或图片），类型为 File
+				// });
+				// uploader.on('media_progress', function(info) {
+				// 	console.log(info.percent) // 进度
+				// });
+				// uploader.done().then(function(doneResult) {
+				// 	console.log("doneResult:", doneResult)
+				// 	// deal with doneResult
+				// }).catch(function(err) {
+				// 	console.log("doneErr:", err)
+				// 	// deal with error
+				// })
+			},
 			recorderPlay() {
 				recorder.play();
 			},
@@ -431,30 +560,27 @@
 				var that = this;
 				console.log("audio:", that.audio)
 				if (that.recorderDuration) {
-					var form = new FormData();
-					let user = that.user ? that.user : 'HEGII';
-					form.append("upfile", that.audio, "HEGII.mp3");
-					console.log("form:", form)
-					uni.uploadFile({
-						url: 'https://www.example.com/upload', //仅为示例，非真实的接口地址
-						filePath: that.audio,
-						name: 'file',
-						formData: {
-							'user': user
-						},
-						success: (uploadFileRes) => {
-							console.log(uploadFileRes.data);
-						}
-					});
+					// var form = new FormData();
+					// let user = that.user ? that.user : 'HEGII';
+					// form.append("upfile", that.audio, "HEGII.mp3");
+					// console.log("form:", form)
+					// uni.uploadFile({
+					// 	url: 'https://www.example.com/upload', //仅为示例，非真实的接口地址
+					// 	filePath: that.audio,
+					// 	name: 'file',
+					// 	formData: {
+					// 		'user': user
+					// 	},
+					// 	success: (uploadFileRes) => {
+					// 		console.log(uploadFileRes.data);
+					// 	}
+					// });
 				}
 			},
 			download() {
-				recorder.downloadWAV();
-				// let formData = new FormData();
-				// formData.append("type", "20");
-				// formData.append("file", blob, "file.wav");
-				// console.log("download", formData)
-				// Recorder.download(blob, 'my-audio-file'); // downloads a .wav file
+				var that = this;
+				// recorder.downloadWAV();
+				recorder.download(that.audio, 'hj', 'mp3');
 			},
 			recorderDestroy() {
 				if (recorder) {
@@ -464,6 +590,43 @@
 					recorder.destroy(fn);
 					recorder = null;
 				}
+			},
+			// 手动上传图片(适用于表单等上传) -2019/05/10增加
+			uAudioTap() {
+				this.$refs.uImage.uploadAudio(this.upImgCos);
+			},
+			// 删除图片 -2019/05/12(本地图片进行删除)
+			async delImgInfo(e) {
+				console.log('你删除的图片地址为:', e);
+			},
+			// 腾讯云
+			async upCosData(e) {
+				if (this.cosFlag) {
+					this.cosArr = await e;
+					// 可以根据长度来判断图片是否上传成功. 2019/4/11新增
+					if (this.cosArr) {
+						uni.showToast({
+							title: `上传成功`,
+							icon: 'none'
+						});
+					}
+				}
+				this.cosFlag = false;
+
+			},
+			// 获取上传图片腾讯云
+			async getUpImgInfoCos() {
+				let arrImg = [];
+				for (let i = 0, len = this.cosArr.length; i < len; i++) {
+					try {
+						if (this.cosArr[i].path_server != "") {
+							await arrImg.push(this.cosArr[i].path_server.split(','));
+						}
+					} catch (err) {
+						console.log('上传失败...');
+					}
+				}
+				console.log('腾讯云转成一维数组:', arrImg.join().split(','));
 			},
 		}
 	}

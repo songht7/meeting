@@ -15,6 +15,8 @@ const store = new Vuex.Store({
 		data: {},
 		interface: common.Interface,
 		systemInfo: {},
+		portrait: "",
+		cosConfig: common.Interface.cosConfig,
 		socketOpen: false,
 		socketErr: ""
 	},

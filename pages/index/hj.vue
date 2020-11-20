@@ -31,37 +31,7 @@
 				</block>
 				<block v-if="signType=='assist'">
 					<block v-if="shakeSwitchState">
-						<view class="active-main">
-							<view class="recorder-box">
-								<!-- <audio style="text-align: left" :src="blob" controls></audio> -->
-								<image src="../../static/2021/1.jpg" mode="aspectFill" class="recorder-btn" @click="recorderPlay" @longpress="startRecording"
-								 @touchend="stopRecording"></image>
-								<view class="recorder-info">
-									{{Recordingbtn}}
-								</view>
-								<view class="recorder-row">
-									<input class="recorder-input" type="text" v-model="user" placeholder="请填写姓名" placeholder-class="placeholder-style" />
-								</view>
-								<sunui-upimg-tencent :upImgConfig="upImgCos" @onUpImg="upCosData" @onImgDel="delImgInfo" ref="uImage"></sunui-upimg-tencent>
-								<!-- <button type="primary" @tap="uAudioTap">发送</button> -->
-								<block v-if="recorderDuration>0&&user!=''">
-									<!-- <view class="recorder-btn" @click="recorderPlay">
-										播放
-									</view> -->
-									<view class="recorder-row">
-										<view class="form-btn" @click="uploadRecorder">
-											发送
-										</view>
-									</view>
-									<!-- <view class="recorder-btn" @click="recorderDestroy">
-										取消
-									</view>
-									<view class="recorder-btn" @click="download">
-										下载
-									</view> -->
-								</block>
-							</view>
-						</view>
+						<image src="../../static/2021/1.jpg" mode=""></image>
 					</block>
 					<block v-else>
 						<img src="../../static/commingsoon.png" id="AssistComming" alt="">
@@ -70,34 +40,45 @@
 				<block v-if="signType=='danmu'">
 					<view class="danmu-box">
 						<block v-if="blessingState!='on'">
-							<view class="danmu-row row-helf">
-								<view class="danmu-title">
-									城市
-								</view>
-								<input class="danmu-ipt" type="text" @blur="pageRestore" v-model="city" placeholder="" />
-							</view>
-							<view class="danmu-row row-helf">
-								<view class="danmu-title">
-									姓名
-								</view>
-								<input class="danmu-ipt" type="text" @blur="pageRestore" v-model="name" placeholder="" />
-							</view>
-							<view class="danmu-row">
-								<view class="sendMsg danmu-btn" @click="sendSocketMessage('blessing')">
-									点击提交
+							<view class="active-main">
+								<view class="recorder-box">
+									<!-- <audio style="text-align: left" :src="blob" controls></audio> -->
+									<image src="../../static/2021/1.jpg" mode="aspectFill" class="recorder-btn" @click="recorderPlay" @longpress="startRecording"
+									 @touchend="stopRecording"></image>
+									<view class="recorder-info">
+										{{Recordingbtn}}
+									</view>
+									<view class="recorder-row">
+										<input class="recorder-input" type="text" v-model="name" placeholder="请填写姓名" placeholder-class="placeholder-style" />
+									</view>
+									<sunui-upimg-tencent :upImgConfig="upImgCos" @onUpImg="upCosData" @onImgDel="delImgInfo" ref="uImage"></sunui-upimg-tencent>
+									<!-- <button type="primary" @tap="uAudioTap">发送</button> -->
+									<block v-if="recorderDuration>0&&name!=''">
+										<!-- <view class="recorder-btn" @click="recorderPlay">
+											播放
+										</view> -->
+										<view class="recorder-row">
+											<view class="form-btn" @click="sendSocketMessage('blessing')">
+												发送
+											</view>
+										</view>
+										<!-- <view class="recorder-btn" @click="recorderDestroy">
+											取消
+										</view>
+										<view class="recorder-btn" @click="download">
+											下载
+										</view> -->
+									</block>
 								</view>
 							</view>
 						</block>
 						<block v-else>
 							<view class="blessingOn">
-								寄语已送达，感谢您的参与
+								祝福已送达，感谢您的参与
 							</view>
 						</block>
 					</view>
 				</block>
-				<view class="user-bubble" v-if="up" :style="{'animation-play-state':paused}">
-					<view class="uname">{{name}}</view>
-				</view>
 			</view>
 		</view>
 	</view>
@@ -140,7 +121,6 @@
 				shakeMp3: "",
 				siginBlockTop: 68,
 				screenHeight: "",
-				user: "",
 				name: "", //签到姓名
 				city: "", //所属城市
 				up: false,
@@ -163,7 +143,7 @@
 				getDataType: 'api', //接受、发送数据方式api，socket
 				isRecording: false,
 				blob: null,
-				Recordingbtn: "长按录音", //音频状态
+				Recordingbtn: "长按发送您的祝福", //音频状态
 				recorderDuration: 0, //音频时长
 				audio: null, //录完的音频
 				cosFlag: true,
@@ -269,17 +249,11 @@
 		onHide() {
 			var that = this;
 			var _getDataType = that.getDataType;
-			if (_getDataType == 'socket') {
-				that.sendSocketMessage('space_close')
-			}
 			that.recorderDestroy()
 		},
 		onUnload() {
 			var that = this;
 			var _getDataType = that.getDataType;
-			if (_getDataType == 'socket') {
-				that.sendSocketMessage('space_close')
-			}
 			that.recorderDestroy()
 		},
 		components: {
@@ -294,7 +268,7 @@
 					"name": that.name
 				};
 				var rule = [];
-				if (that.signType == 'sign') {
+				if (that.signType == 'sign' || that.signType == 'danmu') {
 					var r = [{
 						name: "name",
 						checkType: "notnull",
@@ -317,7 +291,7 @@
 							"method": "POST",
 							"data": {
 								"name": that.name,
-								"city": that.city,
+								"audio": that.$store.state.audio,
 								"enterprise_id": that.enterprise_id,
 							}
 						}
@@ -380,7 +354,7 @@
 						// }, 3000)
 					}
 					console.log(_data);
-					that.$store.dispatch(fun, _data)
+					// that.$store.dispatch(fun, _data)
 				} else {
 					uni.showToast({
 						title: graceChecker.error,
@@ -389,14 +363,6 @@
 				}
 
 			},
-			taijiOpen() {
-				var that = this;
-				if (!that.shakeSwitchState) {
-					return
-				}
-				that.ovHide = true;
-				that.tjPlay = 'running';
-			},
 			shakeSwitch(type) {
 				var that = this;
 				if (that.active != "") { //测试用活动是否开启
@@ -404,7 +370,6 @@
 				} else {
 					var shakeSwitchState = that.shakeSwitchState;
 					var _inter = type ? type : (shakeSwitchState ? 'activityStop' : 'activityStart');
-					console.log(shakeSwitchState, _inter)
 					let _data = {
 						"intUrl": 'ajUrlb',
 						"inter": _inter
@@ -441,7 +406,7 @@
 				var that = this;
 				recorder.stop();
 				that.isRecording = false;
-				that.Recordingbtn = "长按录音";
+				that.Recordingbtn = "长按发送您的祝福";
 				let duration = recorder.duration;
 
 				console.log(recorder.duration);

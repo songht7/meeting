@@ -16,6 +16,7 @@ const store = new Vuex.Store({
 		interface: common.Interface,
 		systemInfo: {},
 		portrait: "",
+		audio: "", //音频COS路径
 		cosConfig: common.Interface.cosConfig,
 		socketOpen: false,
 		socketErr: ""

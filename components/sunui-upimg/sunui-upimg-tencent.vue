@@ -183,7 +183,7 @@
 				let path_server = `https://${opt.Bucket}.cos.${opt.Region}.myqcloud.com/${opt.Key}`;
 				upload_picture_list[j]['upload_percent'] = 100;
 				upload_picture_list[j]['path_server'] = path_server;
-				_this.$store.state.portrait = path_server;
+				_this.$store.state.audio = path_server;
 			} else {
 				console.log(`%c 腾讯云上传失败:${JSON.stringify(err)}`, 'color:#f00');
 				return;

@@ -1,84 +1,109 @@
 * {
-  margin: 0;
-  padding: 0;
+	margin: 0;
+	padding: 0;
 }
 
 html,
 body {
-  height: 100%;
+	height: 100%;
 }
 
 body {
-  overflow: hidden;
-  display: flex;
-  background: #111;
-  perspective: 1000px;
-  transform-style: preserve-3d;
+	overflow: hidden;
+	display: flex;
+	background: #111;
+	perspective: 1000px;
+	transform-style: preserve-3d;
 }
 
-#drag-container, #spin-container {
-  position: relative;
-  display: flex;
-  margin: auto;
-  transform-style: preserve-3d;
-  transform: rotateX(-10deg);
+#drag-container,
+#spin-container {
+	position: relative;
+	display: flex;
+	margin: auto;
+	transform-style: preserve-3d;
+	transform: rotateX(-10deg);
 }
 
-#drag-container img, #drag-container video {
-  transform-style: preserve-3d;
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  line-height: 200px;
-  font-size: 50px;
-  text-align: center;
-  box-shadow: 0 0 8px #fff;
-  -webkit-box-reflect: below 10px linear-gradient(transparent, transparent, #0005);
+#drag-container .imgs,
+#drag-container video {
+	transform-style: preserve-3d;
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	line-height: 200px;
+	font-size: 50px;
+	text-align: center;
+	box-shadow: 0 0 8px #fff;
+	-webkit-box-reflect: below 10px linear-gradient(transparent, transparent, #0005);
 }
 
-#drag-container img:hover, #drag-container video:hover {
-  box-shadow: 0 0 15px #fffd;
-  -webkit-box-reflect: below 10px linear-gradient(transparent, transparent, #0007);
+#drag-container .imgs:hover,
+#drag-container video:hover {
+	box-shadow: 0 0 15px #fffd;
+	-webkit-box-reflect: below 10px linear-gradient(transparent, transparent, #0007);
 }
 
-#drag-container p {
-  font-family: Serif;
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translate(-50%,-50%) rotateX(90deg);
-  color: #fff;
+#drag-container p.bg
+,#drag-container p.text {
+	font-family: Serif;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%) rotateX(90deg);
+	font-size: 50px;
+	color: #fff;
+	width: 200px;
+	height: 220px;
+}
+
+#drag-container p.text {
+	top: 100%;
+	left: 50%;
+}
+
+#drag-container p .box-bg {
+	background: url('https://www.17sucai.com/preview/1750622/2019-07-11/xz/img/pexels-photo-139829.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500') no-repeat 50% 50%;
+	display: block;
+	background-size: cover;
+	width: 100%;
+	height: 100%;
 }
 
 #ground {
-  width: 900px;
-  height: 900px;
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translate(-50%,-50%) rotateX(90deg);
-  background: -webkit-radial-gradient(center center, farthest-side , #9993, transparent);
+	width: 900px;
+	height: 900px;
+	position: absolute;
+	top: 100%;
+	left: 50%;
+	transform: translate(-50%, -50%) rotateX(90deg);
+	background: -webkit-radial-gradient(center center, farthest-side, #9993, transparent);
 }
 
 
 #carousel-container {
-  width: 100%;
-  height: 100%;
+	width: 100%;
+	height: 100%;
 }
 
 @keyframes spin {
-  from{
-    transform: rotateY(0deg);
-  } to{
-    transform: rotateY(360deg);
-  }
+	from {
+		transform: rotateY(0deg);
+	}
+
+	to {
+		transform: rotateY(360deg);
+	}
 }
+
 @keyframes spinRevert {
-  from{
-    transform: rotateY(360deg);
-  } to{
-    transform: rotateY(0deg);
-  }
+	from {
+		transform: rotateY(360deg);
+	}
+
+	to {
+		transform: rotateY(0deg);
+	}
 }

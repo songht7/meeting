@@ -54,7 +54,8 @@
 								<view class="recorder-box">
 									<!-- <audio style="text-align: left" :src="blob" controls></audio> -->
 									<view class="sign-box">
-										<view class="sign-status" @click="recorderPlay" @longpress="startRecording" @touchend="stopRecording">
+										<view class="sign-status">
+											<view class="mark" @click="recorderPlay" @longpress="startRecording" @touchend="stopRecording"></view>
 											<image :class="['sign-loading',isRecording?'animate__rotate':'']" src="/static/2021/rotate.png" mode="aspectFit"></image>
 											<image class="sign-bg" src="/static/2021/mac-bg.png" mode="aspectFit"></image>
 											<view class="sing-label">

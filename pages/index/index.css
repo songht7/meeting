@@ -502,7 +502,8 @@ uni-swiper-item {
 	align-content: center;
 	padding: 80rpx 0 60rpx;
 }
-.box{
+
+.box {
 	width: 70%;
 }
 
@@ -528,6 +529,15 @@ uni-swiper-item {
 	position: relative;
 	width: 300rpx;
 	height: 300rpx;
+}
+
+.mark {
+	position: absolute;
+	z-index: 8;
+	width: 120%;
+	height: 120%;
+	top: -10%;
+	left: -10%;
 }
 
 .sign-loading,

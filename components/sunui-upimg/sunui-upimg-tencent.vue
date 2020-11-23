@@ -117,8 +117,8 @@
 			if (err == null) {
 				console.log(`%c 腾讯云上传(成功返回地址):${data.Location}`, 'color:#1AAD19');
 				let path_server = `https://${opt.Bucket}.cos.${opt.Region}.myqcloud.com/${opt.Key}`;
-				_this.$store.state.portrait = data.Location;
-				console.log("Location:", _this.$store.state.portrait);
+				_this.$store.state.audio = data.Location;
+				// console.log("putObject:::", _this.$store.state.audio)
 			} else {
 				console.log(`%c 腾讯云上传失败:${JSON.stringify(err)}`, 'color:#f00');
 				return;

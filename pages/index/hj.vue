@@ -53,7 +53,13 @@
 									</view>
 									<sunui-upimg-tencent :upImgConfig="upImgCos" @onUpImg="upCosData" @onImgDel="delImgInfo" ref="uImage"></sunui-upimg-tencent>
 									<!-- <button type="primary" @tap="uAudioTap">发送</button> -->
-									<block v-if="recorderDuration>0&&name!=''">
+
+									<view class="recorder-row">
+										<view class="form-btn" @click="sendSocketMessage('blessing')">
+											发送
+										</view>
+									</view>
+									<block v-if="0">
 										<!-- <view class="recorder-btn" @click="recorderPlay">
 											播放
 										</view> -->
@@ -74,7 +80,7 @@
 						</block>
 						<block v-else>
 							<view class="blessingOn">
-								祝福已送达，感谢您的参与
+								已收到您的祝福
 							</view>
 						</block>
 					</view>
@@ -221,14 +227,14 @@
 			if (signType == 'assist') {
 				that.shakeSwitch('activityCheck');
 				/* Recorder实例化*/
+				/* Recorder实例化*/
+			} else if (signType == 'danmu') {
 				recorder = new Recorder({
 					type: "mp3", //此处的type类型是可修改的
 					// bitRate: 16,
 					// sampleRate: 16000,
 					// bufferSize: 8192,
 				});
-				/* Recorder实例化*/
-			} else if (signType == 'danmu') {
 				// navigator.mediaDevices.getUserMedia({
 				// 		audio: true
 				// 	})
@@ -273,12 +279,19 @@
 						name: "name",
 						checkType: "notnull",
 						checkRule: "",
-						errorMsg: "啊呀，您信息还未填写完整~"
+						errorMsg: "请填写您的姓名~"
 					}];
 					rule = [...rule, ...r];
 				}
 				//进行表单检查
 				var checkRes = val == 'space_close' ? true : graceChecker.check(_formData, rule);
+				if (that.signType == 'danmu' && that.$store.state.audio == '') {
+					uni.showToast({
+						title: "您还没有录制祝福哦~",
+						icon: "none"
+					});
+					return false
+				}
 				if (checkRes) {
 					var _data = {};
 					var fun = "sendSocketMessage";
@@ -291,7 +304,7 @@
 							"method": "POST",
 							"data": {
 								"name": that.name,
-								"audio": that.$store.state.audio,
+								"value": that.$store.state.audio,
 								"enterprise_id": that.enterprise_id,
 							}
 						}

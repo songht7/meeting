@@ -8,14 +8,14 @@ page {
 }
 
 .user-box {
-	background: url("../../static/bg.jpg") 50% bottom no-repeat #193977;
+	background: url("../../static/2021/bg1.jpg") 50% bottom no-repeat #193977;
 	background-size: cover;
 	position: relative;
 	min-height: 100%;
 }
 
 .bg2 {
-	background-image: url("../../static/bg2.jpg");
+	background-image: url("../../static/2021/bg1.jpg");
 }
 
 .sign-main {
@@ -24,9 +24,9 @@ page {
 }
 
 #Logo {
-	width: 70%;
+	width: 55%;
 	display: block;
-	margin: 50upx auto;
+	margin: 100upx auto 50upx;
 }
 
 .send-box {
@@ -537,9 +537,8 @@ uni-swiper-item {
 }
 
 .recorder-input {
-	border: 2px solid #F0AD4E;
+	border-bottom: 1px solid #F0AD4E;
 	color: #F0AD4E;
-	border-radius: 10rpx;
 	width:60%;
 	line-height: 2;
 	padding: 30rpx 10rpx;

@@ -1,5 +1,6 @@
 <template>
-	<view class="user-box" :class="signType=='assist'?'bg2':''" ><!-- :style="{'height':screenHeight+'px'}" -->
+	<view class="user-box" :class="signType=='assist'?'bg2':''">
+		<!-- :style="{'height':screenHeight+'px'}" -->
 		<view class="sign-main">
 			<view class="send-box">
 				<view class="typeBtn socketErr" v-if="$store.state.socketErr" @click="$store.dispatch('connectSocket')">{{$store.state.socketErr}}</view>
@@ -31,7 +32,16 @@
 				</block>
 				<block v-if="signType=='assist'">
 					<block v-if="shakeSwitchState">
-						<image src="../../static/2021/1.jpg" mode=""></image>
+						<view class="open-box">
+							<block v-if="!boxIsOpen">
+								<image class="box" @click="openBox" src="../../static/2021/box.png" mode=""></image>
+							</block>
+							<block v-else>
+								<view class="box-opend">
+									<web-view :webview-styles="webviewStyles" src="http://127.0.0.1:8848/meeting/pages/index/index.html"></web-view>
+								</view>
+							</block>
+						</view>
 					</block>
 					<block v-else>
 						<img src="../../static/commingsoon.png" id="AssistComming" alt="">
@@ -157,6 +167,12 @@
 				blessingState: "",
 				enterprise_id: "4", //指定后台账户ID号
 				getDataType: 'api', //接受、发送数据方式api，socket
+				boxIsOpen: false,
+				webviewStyles: {
+					progress: {
+						color: '#010e31'
+					}
+				},
 				dbType: 1, //点播图片1,2,3
 				isRecording: false,
 				blob: null,
@@ -272,6 +288,10 @@
 		},
 		computed: {},
 		methods: {
+			openBox() {
+				var that = this;
+				that.boxIsOpen = true;
+			},
 			sendSocketMessage(val) {
 				var that = this;
 				var _getDataType = that.getDataType;
@@ -623,4 +643,5 @@
 <style>
 	@import '../../common/progress.css';
 	@import './index.css';
+	@import './rotate.css';
 </style>

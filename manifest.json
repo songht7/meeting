@@ -75,6 +75,8 @@
         "router" : {
             "base" : ""
         },
-        "domain" : "sign.bdmartech.com"
+        "domain" : "sign.bdmartech.com",
+        "template" : "",
+        "title" : "恒洁HEGII"
     }
 }

@@ -1,11 +1,11 @@
 
 /*https://www.17sucai.com/preview/1750622/2019-07-11/xz/index.html*/
 
-var radius = 300; 
+var radius = 150; 
 var autoRotate = true; 
 var rotateSpeed = -60;
-var imgWidth = 250;
-var imgHeight = 500;
+var imgWidth = 100;
+var imgHeight = 150;
 
 
 // ===================== start =======================

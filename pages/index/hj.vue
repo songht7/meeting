@@ -1,5 +1,5 @@
 <template>
-	<view class="user-box" :class="signType=='assist'?'bg2':''" :style="{'height':screenHeight+'px'}">
+	<view class="user-box" :class="signType=='assist'?'bg2':''" ><!-- :style="{'height':screenHeight+'px'}" -->
 		<view class="sign-main">
 			<view class="send-box">
 				<view class="typeBtn socketErr" v-if="$store.state.socketErr" @click="$store.dispatch('connectSocket')">{{$store.state.socketErr}}</view>
@@ -43,38 +43,47 @@
 							<view class="active-main">
 								<view class="recorder-box">
 									<!-- <audio style="text-align: left" :src="blob" controls></audio> -->
-									<image src="../../static/2021/1.jpg" mode="aspectFill" class="recorder-btn" @click="recorderPlay" @longpress="startRecording"
-									 @touchend="stopRecording"></image>
-									<view class="recorder-info">
-										{{Recordingbtn}}
+									<view class="sign-box">
+										<view class="sign-status" @click="recorderPlay" @longpress="startRecording" @touchend="stopRecording">
+											<image :class="['sign-loading',isRecording?'animate__rotate':'']" src="/static/2021/rotate.png" mode="aspectFit"></image>
+											<image class="sign-bg" src="/static/2021/mac-bg.png" mode="aspectFit"></image>
+											<view class="sing-label">
+												<image class="sign-db" :src="`/static/2021/db${dbType}.png`" mode="aspectFit"></image>
+												<image class="sign-mac" src="/static/2021/mac.png" mode="aspectFit"></image>
+											</view>
+										</view>
 									</view>
+									<!-- <view class="recorder-info">
+										{{Recordingbtn}}
+									</view> -->
 									<view class="recorder-row">
-										<input class="recorder-input" type="text" v-model="name" placeholder="请填写姓名" placeholder-class="placeholder-style" />
+										<input class="recorder-input" type="text" v-model="name" placeholder="请输入您的姓名" placeholder-class="placeholder-style" />
 									</view>
 									<sunui-upimg-tencent :upImgConfig="upImgCos" @onUpImg="upCosData" @onImgDel="delImgInfo" ref="uImage"></sunui-upimg-tencent>
 									<!-- <button type="primary" @tap="uAudioTap">发送</button> -->
 
 									<view class="recorder-row">
 										<view class="form-btn" @click="sendSocketMessage('blessing')">
-											发送
+											<image class="sign-btn" src="/static/2021/submit.png" mode="aspectFit"></image>
+											点击发送
 										</view>
 									</view>
-									<block v-if="0">
-										<!-- <view class="recorder-btn" @click="recorderPlay">
+									<!-- 	<block v-if="0">
+										<view class="recorder-btn" @click="recorderPlay">
 											播放
-										</view> -->
+										</view>
 										<view class="recorder-row">
 											<view class="form-btn" @click="sendSocketMessage('blessing')">
 												发送
 											</view>
 										</view>
-										<!-- <view class="recorder-btn" @click="recorderDestroy">
+										<view class="recorder-btn" @click="recorderDestroy">
 											取消
 										</view>
 										<view class="recorder-btn" @click="download">
 											下载
-										</view> -->
-									</block>
+										</view>
+									</block> -->
 								</view>
 							</view>
 						</block>
@@ -96,7 +105,8 @@
 
 	import Shake from 'shake.js'
 	import Recorder from 'js-audio-recorder'; //https://blog.csdn.net/weixin_43088706/article/details/104000600
-	let recorder = null;
+	let recorder = null,
+		dbSwitch = null;
 	// import Recorder from 'recorder-js';
 	/*recorder.js*/
 	// const audioContext = new(window.AudioContext || window.webkitAudioContext)();
@@ -147,6 +157,7 @@
 				blessingState: "",
 				enterprise_id: "4", //指定后台账户ID号
 				getDataType: 'api', //接受、发送数据方式api，socket
+				dbType: 1, //点播图片1,2,3
 				isRecording: false,
 				blob: null,
 				Recordingbtn: "长按发送您的祝福", //音频状态
@@ -178,9 +189,9 @@
 		},
 		onLoad(option) {
 			var that = this;
-			let sign = option.sign ? option.sign : 'sign';
+			let sign = option.sign ? option.sign : 'assist'; //'sign'
 			that.signType = sign;
-			let ac = option.ac ? option.ac : ''; //测试用活动是否开启 ac：on off
+			let ac = option.ac ? option.ac : 'on'; //测试用活动是否开启 ac：on off
 			that.active = ac;
 			var _title = '恒洁';
 			switch (sign) {
@@ -197,12 +208,6 @@
 			}
 			uni.setNavigationBarTitle({
 				title: _title
-			});
-			uni.getStorage({
-				key: 'hj-user',
-				success: function(res) {
-					that.user = res.data;
-				}
 			});
 			tcVod = new TcVod({
 				getSignature: function(res) {
@@ -408,6 +413,9 @@
 				recorder.start();
 				that.isRecording = true;
 				that.Recordingbtn = "松开保存";
+				dbSwitch = setInterval(() => {
+					that.dbType = that.dbType + 1 > 3 ? 1 : that.dbType + 1;
+				}, 500)
 				// recorder.start().then(() => {
 				// 	console.log("startRecording")
 				// 	that.isRecording = true;
@@ -418,6 +426,8 @@
 			stopRecording() {
 				var that = this;
 				recorder.stop();
+				clearInterval(dbSwitch);
+				dbSwitch = null;
 				that.isRecording = false;
 				that.Recordingbtn = "长按发送您的祝福";
 				let duration = recorder.duration;

@@ -471,7 +471,8 @@ uni-swiper-item {
 	padding: 0 60upx;
 	margin: 45% auto 0;
 	text-shadow: 5upx 5upx 5upx #0E2253;
-	transform: scale(1.2)
+	transform: scale(1.2);
+	letter-spacing: 6upx;
 }
 
 .blessingOn:before,
@@ -492,6 +493,89 @@ uni-swiper-item {
 
 
 /** 2021 **/
+.active-main {
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	align-content: center;
+}
+
+.sign-box {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	padding: 80rpx 0 60rpx;
+}
+
+.sign-status {
+	position: relative;
+	width: 300rpx;
+	height: 300rpx;
+}
+
+.sign-loading,
+.sign-bg,
+.sing-label {
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 1;
+	width: 100%;
+	height: 100%;
+}
+
+@keyframes rotate {
+	from {
+		transform: rotate(0deg)
+	}
+
+	to {
+		transform: rotate(359deg)
+	}
+}
+
+.animate__rotate {
+	animation: rotate 3s linear infinite;
+	animation-fill-mode: forwards;
+}
+
+.sign-bg {
+	top: -25%;
+	left: -25%;
+	z-index: 2;
+	width: 150%;
+	height: 150%;
+}
+
+.sing-label {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	align-content: center;
+	z-index: 3;
+	color: #fff;
+	font-size: 38rpx;
+	position: relative;
+	overflow: hidden;
+}
+
+.sign-mac {
+	position: relative;
+	z-index: 5;
+	width: 55%;
+	height: 55%;
+}
+
+.sign-db {
+	position: absolute;
+	width: 75%;
+	z-index: 4;
+}
 
 .recorder-btn {
 	width: 100%;
@@ -513,9 +597,12 @@ uni-swiper-item {
 }
 
 .form-btn {
-	width: 70%;
-	border: 1px solid #FFFFFF;
+	position: relative;
+	z-index: 10;
+	padding: 180rpx 0 60rpx;
+	width: 80%;
 	display: flex;
+	flex-direction: column;
 	justify-content: center;
 	text-align: center;
 	border-radius: 10rpx;
@@ -523,6 +610,11 @@ uni-swiper-item {
 	align-content: center;
 	color: #FFFFFF;
 	line-height: 3;
+}
+
+.sign-btn {
+	width: 80rpx;
+	height: 80rpx;
 }
 
 .recorder-row {
@@ -539,11 +631,11 @@ uni-swiper-item {
 .recorder-input {
 	border-bottom: 1px solid #F0AD4E;
 	color: #F0AD4E;
-	width:60%;
+	width: 100%;
 	line-height: 2;
-	padding: 30rpx 10rpx;
+	padding: 20rpx 10rpx;
 }
 
 .placeholder-style {
-	color: #F0AD4E;
+	color: #c19453;
 }

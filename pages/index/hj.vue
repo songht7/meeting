@@ -38,7 +38,7 @@
 							</block>
 							<block v-else>
 								<view class="box-opend">
-									<web-view :webview-styles="webviewStyles" src="http://sign.bdmartech.com/meeting/pages/index/index.html"></web-view>
+									<web-view :webview-styles="webviewStyles" src="http://box.bdmartech.com"></web-view>
 								</view>
 							</block>
 						</view>

@@ -166,7 +166,8 @@
 				ovHide: false,
 				shakeSwitchState: false, //助力摇一摇是否开启
 				blessingState: "",
-				enterprise_id: "4", //指定后台账户ID号
+				enterprise_id: "3", //指定后台账户ID号
+				sub_type: "link", //指定后台sub_type:link
 				getDataType: 'api', //接受、发送数据方式api，socket
 				boxIsOpen: false,
 				webviewStyles: {
@@ -205,6 +206,10 @@
 			}
 		},
 		onLoad(option) {
+			/*
+			 * /pages/index/hj
+			 * /pages/index/hj?sign=danmu
+			 */
 			var that = this;
 			let sign = option.sign ? option.sign : 'assist'; //'sign'
 			that.signType = sign;
@@ -332,6 +337,7 @@
 								"name": that.name,
 								"value": that.$store.state.audio,
 								"enterprise_id": that.enterprise_id,
+								"sub_type": that.sub_type
 							}
 						}
 					} else { //签到
@@ -393,7 +399,7 @@
 						// }, 3000)
 					}
 					console.log(_data);
-					// that.$store.dispatch(fun, _data)
+					that.$store.dispatch(fun, _data)
 				} else {
 					uni.showToast({
 						title: graceChecker.error,

@@ -1,5 +1,8 @@
 <template>
 	<view class="user-box" :class="signType=='assist'?'bg2':''">
+		<view style="color:#fff;">
+			{{brow}} - {{System}}
+		</view>
 		<!-- :style="{'height':screenHeight+'px'}" -->
 		<view class="sign-main">
 			<view class="send-box">
@@ -78,9 +81,6 @@
 								</block>
 								<view class="recorder-row">
 									<block v-if="blessingState!='on'">
-										<view style="color:#fff;">
-											{{brow}} - {{System}}
-										</view>
 										<view class="form-btn" @click="sendSocketMessage('blessing')">
 											<image class="sign-btn" src="/static/2021/submit-btn.png" mode="aspectFit"></image>
 											<view class="txts">
@@ -259,7 +259,7 @@
 			})
 			let brow = that.getBrow();
 			that.brow = "Safari：" + brow.Safari;
-			that.System = "ios:" + brow.ios + "  android:" + brow.android;;
+			that.System = "ios:" + brow.ios + "，  android:" + brow.android;;
 			console.log("brow:brow:", brow)
 		},
 		onShow() {

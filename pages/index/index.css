@@ -8,14 +8,14 @@ page {
 }
 
 .user-box {
-	background: url("../../static/2021/bg1.jpg") 50% bottom no-repeat #193977;
-	background-size: cover;
+	background: url("../../static/2021/bg.jpg") 50% bottom no-repeat #193977;
+	background-size: auto 100%;
 	position: relative;
 	min-height: 100%;
 }
 
 .bg2 {
-	background-image: url("../../static/2021/bg1.jpg");
+	background-image: url("../../static/2021/bg.jpg");
 }
 
 .sign-main {
@@ -414,8 +414,7 @@ uni-swiper-item {
 	flex-direction: row;
 	justify-content: space-between;
 	flex-wrap: wrap;
-	width: 90%;
-	padding: 50upx 5% 0;
+	width: 100%;
 }
 
 .danmu-row {
@@ -509,8 +508,18 @@ uni-swiper-item {
 
 .active-main {
 	width: 100%;
+	padding-top: 900rpx;
 	display: flex;
 	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	align-content: center;
+}
+
+.recorder-box {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
 	justify-content: center;
 	align-items: center;
 	align-content: center;
@@ -522,13 +531,22 @@ uni-swiper-item {
 	justify-content: center;
 	align-items: center;
 	width: 100%;
-	padding: 80rpx 0 60rpx;
+	padding: 60rpx 0;
+}
+
+.rec-box {
+	background: url(../../static/2021/db.png) 50% 50% no-repeat;
+	background-size: 120%;
 }
 
 .sign-status {
 	position: relative;
 	width: 300rpx;
 	height: 300rpx;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	align-content: center;
 }
 
 .mark {
@@ -542,6 +560,7 @@ uni-swiper-item {
 
 .sign-loading,
 .sign-bg,
+.sign-bg2,
 .sing-label {
 	position: absolute;
 	top: 0;
@@ -549,6 +568,42 @@ uni-swiper-item {
 	z-index: 1;
 	width: 100%;
 	height: 100%;
+}
+
+.sign-bg2 {
+	position: static;
+	width: 80%;
+	height: 80%;
+}
+
+@keyframes clicked {
+	from {
+		width: 75%;
+		height: 75%;
+	}
+
+	to {
+		width: 75%;
+		height: 75%;
+	}
+}
+
+.rec-clicked .sign-bg2 {
+	animation: clicked 1s linear infinite;
+}
+
+@keyframes dbshane {
+	from {
+		background-size: 90%;
+	}
+
+	to {
+		background-size: 120%;
+	}
+}
+
+.rec-clicked.rec-box {
+	animation: dbshane 0.5s linear infinite;
 }
 
 @keyframes rotate {
@@ -622,7 +677,7 @@ uni-swiper-item {
 .form-btn {
 	position: relative;
 	z-index: 10;
-	padding: 180rpx 0 60rpx;
+	padding: 60rpx 0;
 	width: 80%;
 	display: flex;
 	flex-direction: column;
@@ -636,8 +691,8 @@ uni-swiper-item {
 }
 
 .sign-btn {
-	width: 80rpx;
-	height: 80rpx;
+	width: 150rpx;
+	height: 150rpx;
 }
 
 .recorder-row {
@@ -651,14 +706,36 @@ uni-swiper-item {
 	margin-bottom: 25rpx;
 }
 
+.block-40 {
+	width: 40%;
+}
+
 .recorder-input {
-	border-bottom: 1px solid #F0AD4E;
-	color: #F0AD4E;
+	color: #FFFFFF;
+	text-shadow: 2rpx 2rpx 5rpx #333;
 	width: 100%;
 	line-height: 2;
 	padding: 20rpx 10rpx;
 }
+.txts{
+	font-size: 36rpx;
+	text-shadow: 4rpx 4rpx 20rpx #333;
+}
+.row-column {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.line {
+	height: 1px;
+	width: 100%;
+	border-bottom: 1px solid #FFFFFF;
+	box-shadow: 2rpx 2rpx 5rpx #333;
+}
 
 .placeholder-style {
-	color: #c19453;
+	color: #FFFFFF;
+	text-shadow: 2rpx 2rpx 5rpx #333;
 }

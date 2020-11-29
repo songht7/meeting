@@ -3,8 +3,8 @@
 		<!-- :style="{'height':screenHeight+'px'}" -->
 		<view class="sign-main">
 			<view class="send-box">
-				<!-- <view class="typeBtn socketErr" v-if="$store.state.socketErr" @click="$store.dispatch('connectSocket')">{{$store.state.socketErr}}</view> -->
-				<!-- <img src="../../static/logo.png" id="Logo" alt=""> -->
+				<view class="typeBtn socketErr" v-if="$store.state.socketErr" @click="$store.dispatch('connectSocket')">{{$store.state.socketErr}}</view>
+				<img src="../../static/logo.png" id="Logo" alt="">
 				<block v-if="signType=='sign'">
 					<view class="sigin-form">
 						<image class="water" :class="paused == 'running'?'water-anim':''" :style="{'animation-play-state':paused}" src="../../static/water.png"
@@ -49,55 +49,37 @@
 				</block>
 				<block v-if="signType=='danmu'">
 					<view class="danmu-box">
-						<view class="active-main">
-							<view class="recorder-box">
-								<!-- <audio style="text-align: left" :src="blob" controls></audio> -->
-								<block v-if="blessingState!='on'">
-									<view class="recorder-row block-40 row-column">
-										<input class="recorder-input" type="text" v-model="name" placeholder="输入您的姓名" placeholder-class="placeholder-style" />
-										<view class="line"></view>
-									</view>
-									<view :class="['sign-box','rec-box',isRecording?'rec-clicked':'']">
+						<block v-if="blessingState!='on'">
+							<view class="active-main">
+								<view class="recorder-box">
+									<!-- <audio style="text-align: left" :src="blob" controls></audio> -->
+									<view class="sign-box">
 										<view class="sign-status">
 											<view class="mark" @click="recorderPlay" @longpress="startRecording" @touchend="stopRecording"></view>
-											<image :class="['sign-bg2']" src="/static/2021/mac2.png" mode="aspectFit"></image>
-											<!-- <image :class="['sign-loading',isRecording?'animate__rotate':'']" src="/static/2021/rotate.png" mode="aspectFit"></image>
+											<image :class="['sign-loading',isRecording?'animate__rotate':'']" src="/static/2021/rotate.png" mode="aspectFit"></image>
 											<image class="sign-bg" src="/static/2021/mac-bg.png" mode="aspectFit"></image>
 											<view class="sing-label">
 												<image class="sign-db" :src="`/static/2021/db${dbType}.png`" mode="aspectFit"></image>
 												<image class="sign-mac" src="/static/2021/mac.png" mode="aspectFit"></image>
-											</view> -->
+											</view>
 										</view>
 									</view>
 									<!-- <view class="recorder-info">
 										{{Recordingbtn}}
 									</view> -->
+									<view class="recorder-row">
+										<input class="recorder-input" type="text" v-model="name" placeholder="请输入您的姓名" placeholder-class="placeholder-style" />
+									</view>
 									<sunui-upimg-tencent :upImgConfig="upImgCos" @onUpImg="upCosData" @onImgDel="delImgInfo" ref="uImage"></sunui-upimg-tencent>
 									<!-- <button type="primary" @tap="uAudioTap">发送</button> -->
 
-								</block>
-								<view class="recorder-row">
-									<block v-if="blessingState!='on'">
+									<view class="recorder-row">
 										<view class="form-btn" @click="sendSocketMessage('blessing')">
-											<image class="sign-btn" src="/static/2021/submit-btn.png" mode="aspectFit"></image>
-											<view class="txts">
-												点击发送
-											</view>
+											<image class="sign-btn" src="/static/2021/submit.png" mode="aspectFit"></image>
+											点击发送
 										</view>
-									</block>
-									<block v-else>
-										<view class="form-btn">
-											<image class="sign-btn" src="/static/2021/success.png" mode="aspectFit"></image>
-											<view class="txts">
-												发送成功
-											</view>
-										</view>
-										<!-- <view class="blessingOn">
-											已收到您的祝福
-										</view> -->
-									</block>
-								</view>
-								<!-- 	<block v-if="0">
+									</view>
+									<!-- 	<block v-if="0">
 										<view class="recorder-btn" @click="recorderPlay">
 											播放
 										</view>
@@ -113,8 +95,14 @@
 											下载
 										</view>
 									</block> -->
+								</view>
 							</view>
-						</view>
+						</block>
+						<block v-else>
+							<view class="blessingOn">
+								已收到您的祝福
+							</view>
+						</block>
 					</view>
 				</block>
 			</view>

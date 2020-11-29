@@ -78,6 +78,9 @@
 								</block>
 								<view class="recorder-row">
 									<block v-if="blessingState!='on'">
+										<view style="color:#fff;">
+											{{brow}} - {{System}}
+										</view>
 										<view class="form-btn" @click="sendSocketMessage('blessing')">
 											<image class="sign-btn" src="/static/2021/submit-btn.png" mode="aspectFit"></image>
 											<view class="txts">
@@ -214,7 +217,8 @@
 					path: `user_path/hengjie/`,
 					audioKey: "user_path/hegii/",
 					photoType: "hj-"
-				}
+				},
+				brow: ""
 			}
 		},
 		onLoad(option) {
@@ -248,6 +252,15 @@
 					return that.$store.state.cosConfig
 				}
 			})
+			uni.getSystemInfo({
+				success(res) {
+					console.log(res)
+				}
+			})
+			let brow = that.getBrow();
+			that.brow = "Safari：" + brow.Safari;
+			that.System = "ios:" + brow.ios + "  android:" + brow.android;;
+			console.log("brow:brow:", brow)
 		},
 		onShow() {
 			var that = this;
@@ -654,6 +667,55 @@
 					}
 				}
 				console.log('腾讯云转成一维数组:', arrImg.join().split(','));
+			},
+			getBrow() {
+				var u = navigator.userAgent;
+				var ua = navigator.userAgent.toLocaleLowerCase();
+				var app = navigator.appVersion;
+				return {
+					trident: u.indexOf('Trident') > -1,
+					/*IE内核*/
+					presto: u.indexOf('Presto') > -1,
+					/*opera内核*/
+					webKit: u.indexOf('AppleWebKit') > -1,
+					/*苹果、谷歌内核*/
+					gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1,
+					/*火狐内核*/
+					mobile: !!u.match(/AppleWebKit.*Mobile.*/),
+					/*是否为移动终端*/
+					ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/),
+					/*ios终端*/
+					android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1,
+					/*android终端或者uc浏览器*/
+					iPhone: u.indexOf('iPhone') > -1,
+					/*是否为iPhone或者QQHD浏览器*/
+					iPad: u.indexOf('iPad') > -1,
+					/*是否iPad*/
+					webApp: u.indexOf('Safari') == -1,
+					/*是否web应该程序，没有头部与底部*/
+					souyue: u.indexOf('souyue') > -1,
+					superapp: u.indexOf('superapp') > -1,
+					weixin: u.toLowerCase().indexOf('micromessenger') > -1,
+					qq: ua.match(/QQ/i) == "qq", // QQ
+					weiBo: ua.match(/WeiBo/i) == "weibo", // 微博
+					Safari: u.indexOf('Safari') > -1,
+					QQbrw: u.indexOf('MQQBrowser') > -1, // QQ浏览器
+					webview: !(u.match(/Chrome\/([\d.]+)/) || u.match(/CriOS\/([\d.]+)/)) && u.match(
+						/(iPhone|iPod|iPad).*AppleWebKit(?!.*Safari)/),
+					ucweb: function() {
+						try {
+							return parseFloat(u.match(/ucweb\d+\.\d+/gi).toString().match(/\d+\.\d+/).toString()) >= 8.2
+						} catch (e) {
+							if (u.indexOf('UC') > -1) {
+								return true;
+							}
+							return false;
+						}
+					}(),
+
+					Symbian: u.indexOf('Symbian') > -1,
+					ucSB: u.indexOf('Firofox/1.') > -1,
+				};
 			},
 		}
 	}

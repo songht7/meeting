@@ -1,8 +1,8 @@
 <template>
 	<view class="user-box" :class="signType=='assist'?'bg2':''">
-		<view style="color:#fff;">
+		<!-- <view style="color:#fff;">
 			{{brow}} - {{System}}
-		</view>
+		</view> -->
 		<!-- :style="{'height':screenHeight+'px'}" -->
 		<view class="sign-main">
 			<view class="send-box">
@@ -63,8 +63,12 @@
 									</view>
 									<view :class="['sign-box','rec-box',isRecording?'rec-clicked':'']">
 										<view class="sign-status">
-											<view class="mark" @click="recorderPlay" @longpress="startRecording" @touchend="stopRecording"></view>
-											<!-- <view class="mark" @click="wxRecorderPlay" @longpress="wxStartRecording" @touchend="wxStopRecording"></view> -->
+											<block v-if="wxsdk">
+												<view class="mark" @click="wxRecorderPlay" @longpress="wxStartRecording" @touchend="wxStopRecording"></view>
+											</block>
+											<block v-else>
+												<view wx:else class="mark" @click="recorderPlay" @longpress="startRecording" @touchend="stopRecording"></view>
+											</block>
 											<image :class="['sign-bg2']" src="/static/2021/mac2.png" mode="aspectFit"></image>
 											<!-- <image :class="['sign-loading',isRecording?'animate__rotate':'']" src="/static/2021/rotate.png" mode="aspectFit"></image>
 											<image class="sign-bg" src="/static/2021/mac-bg.png" mode="aspectFit"></image>
@@ -128,7 +132,8 @@
 </template>
 
 <script>
-	const wx = require('jweixin-module')
+	// var wx = require("@/common/jweixin-1.6.0.js");
+	var jweixin = require('jweixin-module')
 	import TcVod from 'vod-js-sdk-v6'
 	let tcVod = "";
 
@@ -221,7 +226,9 @@
 					audioKey: "user_path/hegii/",
 					photoType: "hj-"
 				},
-				brow: ""
+				brow: "",
+				redirect_uri: 'http://sign.bdmartech.com', //
+				wxsdk: false //是否微信SDK false、true
 			}
 		},
 		onLoad(option) {
@@ -242,7 +249,9 @@
 				case 'danmu':
 					that.blessingState = 'off';
 					_title = '给恒洁2021的寄语'
-					// that.getWXCode();
+					if (that.wxsdk) {
+						that.getWXTicket();
+					}
 					break;
 				default:
 					_title = '恒洁-签到'
@@ -467,37 +476,35 @@
 			wxStartRecording() {
 				var that = this;
 				console.log("wx--StartRecording")
-				wx.ready(function() {
-					wx.startRecord();
-				});
+				jweixin.ready(function() {});
+				jweixin.startRecord();
 				that.isRecording = true;
 				that.Recordingbtn = "松开保存";
 			},
 			wxStopRecording() {
 				var that = this;
-				wx.ready(function() {
-					wx.stopRecord({
-						success: function(res) {
-							var localId = res.localId;
-							that.localId = localId;
-							console.log("localId:", localId)
-							// if (duration > 0) {
-							// 	/****tcVod***/
-							// 	that.blobToFile(Blob);
-							// 	/****tcVod***/
+				jweixin.stopRecord({
+					success: function(res) {
+						var localId = res.localId;
+						that.localId = localId;
+						that.uploadWXRec();
+						console.log("localId:", localId)
+						// if (duration > 0) {
+						// 	/****tcVod***/
+						// 	that.blobToFile(Blob);
+						// 	/****tcVod***/
 
 
-							// } else {
-							// 	uni.showToast({
-							// 		title: `录音失败`,
-							// 		icon: 'none'
-							// 	});
-							// }
-						},
-						fail(err) {
-							console.log("wxStopRecording-fail:", err)
-						}
-					});
+						// } else {
+						// 	uni.showToast({
+						// 		title: `录音失败`,
+						// 		icon: 'none'
+						// 	});
+						// }
+					},
+					fail(err) {
+						console.log("wxStopRecording-fail:", err)
+					}
 				});
 				console.log("wx--StopRecording")
 				clearInterval(dbSwitch);
@@ -507,11 +514,26 @@
 			},
 			wxRecorderPlay() {
 				var that = this;
-				wx.ready(function() {
-					wx.playVoice({
+				jweixin.ready(function() {
+					jweixin.playVoice({
 						localId: that.localId // 需要播放的音频的本地ID，由stopRecord接口获得
 					});
 				})
+			},
+			uploadWXRec() {
+				var that = this;
+				jweixin.uploadVoice({
+					localId: that.localId, // 需要上传的音频的本地ID，由stopRecord接口获得
+					isShowProgressTips: 1, // 默认为1，显示进度提示
+					success: function(res) {
+						console.log("uploadVoice:", res)
+						var serverId = res.serverId; // 返回音频的服务器端ID
+						// 	that.blobToFile(JSON.stringify(res));
+					},
+					fail(err) {
+						console.log("uploadVoice-err:", err)
+					}
+				});
 			},
 			startRecording() {
 				var that = this;
@@ -776,7 +798,7 @@
 				if (code) {
 					that.getWXTicket();
 				} else {
-					let redirect_uri = 'http://sign.bdmartech.com/';
+					let redirect_uri = that.redirect_uri;
 					let REDIRECT_URI = encodeURIComponent(redirect_uri), //授权后重定向的回调链接地址， 请使用 urlEncode 对链接进行处理
 						scope = "snsapi_userinfo", //snsapi_base，snsapi_userinfo （弹出授权页面，获取更多信息）
 						state = "STATE"; //重定向后会带上state参数，开发者可以填写a-zA-Z0-9的参数值，最多128字节
@@ -789,58 +811,89 @@
 			},
 			getWXTicket() {
 				const that = this;
-				let channel_code = that.queryString('code');
-				var getTicketUrl = "http://sign.bdmartech.com/#/";
-				if (that.isIOS()) {
-					getTicketUrl = "http://sign.bdmartech.com/";
-				}
-				let _data = {
-					"intUrl": 'apiurlmt',
-					"inter": 'getJsApiTicket',
-					'parm': "?url=" + getTicketUrl,
-					'header': {
-						"channel_code": channel_code
-					}
-				};
-				_data["fun"] = function(ress) {
-					console.log("=======getTicket======")
-					console.log(ress)
-					if (ress.success) {
-						let res = ress.data;
-						uni.setStorage({
-							key: 'wx_ticket',
-							data: {
-								"access_token": res.access_token,
-								"jsapi_ticket": res.ticket,
-								"noncestr": res.noncestr,
-								"signature": res.signature,
-								"expires_in": res.expires_in,
-								timestamp: res.timestamp,
-							},
-							success: function() {}
-						});
-						var _config = {
-							debug: false,
-							appId: 'wx11eb371cd85adfd4',
-							timestamp: res.timestamp,
-							nonceStr: res.noncestr,
-							signature: res.signature,
-							jsApiList: [
-								'onMenuShareAppMessage',
-								'startRecord',
-								'stopRecord',
-								'onVoiceRecordEnd',
-								'playVoice',
-								'pauseVoice',
-								'stopVoice',
-								'onVoicePlayEnd',
-								'uploadVoice'
-							]
+				// var getTicketUrl = that.redirect_uri;
+				// getTicketUrl = encodeURIComponent(getTicketUrl);
+				var getTicketUrl = encodeURIComponent(location.href);
+				var api = 'http://api_test.meetji.com/v2/ApiWeChat-getJsApiTicket.htm?url=' + getTicketUrl;
+				console.log("getWXTicket:", api);
+				uni.request({
+					url: api,
+					method: "GET",
+					data: {},
+					header: {},
+					success: function(res) {
+						console.log(res);
+						let __res = res.data;
+						var result = {};
+						if (__res.success) {
+							if (__res.data) {
+								result = __res.data;
+							}
+							uni.setStorage({
+								key: 'wx_ticket',
+								data: {
+									"access_token": result.access_token,
+									"jsapi_ticket": result.ticket,
+									"noncestr": result.noncestr,
+									"signature": result.signature,
+									"expires_in": result.expires_in
+								},
+								success: function() {}
+							});
+							var _config = {
+								debug: false,
+								appId: 'wx11eb371cd85adfd4',
+								timestamp: result.timestamp,
+								nonceStr: result.noncestr,
+								signature: result.signature,
+								jsApiList: [
+									'updateAppMessageShareData',
+									'updateTimelineShareData',
+									'onMenuShareAppMessage',
+									'onMenuShareTimeline',
+									'onMenuShareQQ',
+									'onMenuShareAppMessage',
+									'startRecord',
+									'stopRecord',
+									'onVoiceRecordEnd',
+									'playVoice',
+									'pauseVoice',
+									'stopVoice',
+									'onVoicePlayEnd',
+									'uploadVoice'
+								]
+							}
+							console.log("_config:", _config)
+							jweixin.config(_config);
+						} else {
+							result = {
+								"Result": "0",
+								"Msg": "请求失败，请重试!",
+								"err": ""
+							}
 						}
-						wx.config(_config);
-					}
-				}
-				that.$store.dispatch("getData", _data)
+					},
+					fail: function(err) {},
+					complete: function(comp) {}
+				})
+				var wxSet = {
+					title: "恒洁2021新品发布",
+					desc: "新创变 耀非凡",
+					link: 'http://sign.bdmartech.com',
+					imgUrl: 'http://sign.bdmartech.com/static/title.png',
+					success: function() {}
+				};
+				jweixin.ready(function() {
+					//wx.updateAppMessageShareData(wxSet);
+					//wx.updateTimelineShareData(wxSet);
+					// 2. 分享接口
+					// 2.1 监听“分享给朋友”，按钮点击、自定义分享内容及分享结果接口
+					jweixin.onMenuShareAppMessage(wxSet);
+					// 2.2 监听“分享到朋友圈”按钮点击、自定义分享内容及分享结果接口
+					jweixin.onMenuShareTimeline(wxSet);
+					// 2.3 监听“分享到QQ”按钮点击、自定义分享内容及分享结果接口
+					jweixin.onMenuShareQQ(wxSet);
+				});
 			},
 			queryString(value) {
 				const reg = new RegExp(`(^|&)${value}=([^&]*)(&|$)`, 'i')

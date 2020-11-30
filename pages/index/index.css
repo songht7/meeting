@@ -26,13 +26,13 @@ page {
 #Logo {
 	width: 55%;
 	display: block;
-	margin: 100upx auto 50upx;
+	margin: 60upx auto 50upx;
 }
 
 #Title {
 	width: 100%;
 	display: block;
-	margin: 50upx auto;
+	margin: 30upx auto;
 }
 
 .send-box {
@@ -537,7 +537,7 @@ uni-swiper-item {
 	justify-content: center;
 	align-items: center;
 	width: 100%;
-	padding: 60rpx 0;
+	padding: 20rpx 0;
 }
 
 .rec-box {
@@ -683,7 +683,7 @@ uni-swiper-item {
 .form-btn {
 	position: relative;
 	z-index: 10;
-	padding: 60rpx 0;
+	padding: 40rpx 0 0;
 	width: 80%;
 	display: flex;
 	flex-direction: column;

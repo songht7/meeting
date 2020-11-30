@@ -194,9 +194,9 @@ const store = new Vuex.Store({
 				}
 				wx.config(_config);
 			}
-			var getTicketUrl = location.origin + "/#/";
+			var getTicketUrl = "http://sign.bdmartech.com/#/";
 			if (that.isIOS()) {
-				getTicketUrl = location.origin + "/";
+				getTicketUrl = "http://sign.bdmartech.com/";
 			}
 			let url_ticket = Interface.apiurl + Interface.addr.getJsApiTicket + "?url=" + getTicketUrl;
 			let _head = {};
@@ -219,10 +219,10 @@ const store = new Vuex.Store({
 			// 		console.log(_href)
 			_href = "http://main.meetji.com:3001?wxr=" + encodeURIComponent(_href)
 			var share_url = share_url ? share_url : _href;
-			imgUrl = imgUrl ? imgUrl : Interface.domain + "/static/share.jpg";
+			imgUrl = imgUrl ? imgUrl : Interface.domain + "/static/logo.png";
 			var wxSet = {
-				title: title || "英语免费试听",
-				desc: dec || "英语免费试听课，在这里找到你想要的",
+				title: title || "恒洁2021",
+				desc: dec || "新品发布，新创变 耀非凡",
 				link: share_url,
 				imgUrl: imgUrl,
 				success: function() {

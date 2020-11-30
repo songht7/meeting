@@ -9,7 +9,7 @@ var api = {
 		"wsUrl": "ws://socket.wsshanghai.com:12345", //服务器地址 
 		"ajUrl": "http://socket.wsshanghai.com", //服务器地址 开关
 		"ajUrlb": "https://socketb.wsshanghai.com", //服务器地址 开关
-		"apiUrl": "http://api-head.wsshanghai.com",//数据接口->apiUrl
+		"apiUrl": "http://api-head.wsshanghai.com", //数据接口->apiUrl
 		"appName": "年会",
 		"cosConfig": { //`https://plbs-test-1257286922.cos.ap-shanghai.myqcloud.com/...`
 			"Bucket": 'plbs-test-1257286922',
@@ -22,7 +22,8 @@ var api = {
 		"wsUrl": "ws://socket.wsshanghai.com:12345", //服务器地址
 		"ajUrl": "http://socket.wsshanghai.com", //服务器地址 开关
 		"ajUrlb": "https://socketb.wsshanghai.com", //服务器地址 开关 https的话用socketb
-		"apiUrl": "http://api-head.wsshanghai.com",//数据接口->apiUrl
+		"apiUrl": "http://api-head.wsshanghai.com", //数据接口->apiUrl
+		"apiurlmt": "http://api_test.meetji.com",
 		"appName": "年会",
 		"cosConfig": { //`http://plbs-test-1257286922.cos.ap-shanghai.myqcloud.com/...`
 			"Bucket": 'plbs-test-1257286922',
@@ -39,6 +40,7 @@ export default {
 		"wsUrl": api[lks]["wsUrl"],
 		"ajUrl": api[lks]["ajUrl"],
 		"ajUrlb": api[lks]["ajUrlb"],
+		"apiurlmt": api[lks]["apiurlmt"],
 		"appName": api[lks]["appName"],
 		"apiUrl": api[lks]["apiUrl"],
 		"cosConfig": api[lks]["cosConfig"],
@@ -46,9 +48,10 @@ export default {
 			"activityCheck": '/activityCheck.htm',
 			"activityStart": '/activityStart.htm',
 			"activityStop": '/activityStop.htm',
+			"getJsApiTicket": "/v2/ApiWeChat-getJsApiTicket.htm", //wx js ticket
 
-			"SiteInfomation": "/v5/SiteInfomation-add.htm",//寄语 数据接口->apiUrl name value
-			"SiteSign": "/v5/Sign-add.htm"//签到 数据接口->apiUrl
+			"SiteInfomation": "/v5/SiteInfomation-add.htm", //寄语 数据接口->apiUrl name value
+			"SiteSign": "/v5/Sign-add.htm" //签到 数据接口->apiUrl
 		}
 	}
 }

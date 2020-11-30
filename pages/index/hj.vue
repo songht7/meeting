@@ -7,7 +7,8 @@
 		<view class="sign-main">
 			<view class="send-box">
 				<!-- <view class="typeBtn socketErr" v-if="$store.state.socketErr" @click="$store.dispatch('connectSocket')">{{$store.state.socketErr}}</view> -->
-				<!-- <img src="../../static/logo.png" id="Logo" alt=""> -->
+				<img src="../../static/2021/logo.png" id="Logo" alt="">
+				<img src="../../static/2021/title.png" id="Title" alt="">
 				<block v-if="signType=='sign'">
 					<view class="sigin-form">
 						<image class="water" :class="paused == 'running'?'water-anim':''" :style="{'animation-play-state':paused}" src="../../static/water.png"
@@ -63,6 +64,7 @@
 									<view :class="['sign-box','rec-box',isRecording?'rec-clicked':'']">
 										<view class="sign-status">
 											<view class="mark" @click="recorderPlay" @longpress="startRecording" @touchend="stopRecording"></view>
+											<!-- <view class="mark" @click="wxRecorderPlay" @longpress="wxStartRecording" @touchend="wxStopRecording"></view> -->
 											<image :class="['sign-bg2']" src="/static/2021/mac2.png" mode="aspectFit"></image>
 											<!-- <image :class="['sign-loading',isRecording?'animate__rotate':'']" src="/static/2021/rotate.png" mode="aspectFit"></image>
 											<image class="sign-bg" src="/static/2021/mac-bg.png" mode="aspectFit"></image>
@@ -126,6 +128,7 @@
 </template>
 
 <script>
+	const wx = require('jweixin-module')
 	import TcVod from 'vod-js-sdk-v6'
 	let tcVod = "";
 
@@ -181,7 +184,7 @@
 				ovHide: false,
 				shakeSwitchState: false, //助力摇一摇是否开启
 				blessingState: "",
-				enterprise_id: "3", //指定后台账户ID号
+				enterprise_id: "4", //指定后台账户ID号
 				sub_type: "link", //指定后台sub_type:link
 				getDataType: 'api', //接受、发送数据方式api，socket
 				boxIsOpen: false,
@@ -227,7 +230,7 @@
 			 * /pages/index/hj?sign=danmu
 			 */
 			var that = this;
-			let sign = option.sign ? option.sign : 'assist'; //'sign'
+			let sign = option.sign ? option.sign : 'danmu'; //'sign'
 			that.signType = sign;
 			let ac = option.ac ? option.ac : 'on'; //测试用活动是否开启 ac：on off
 			that.active = ac;
@@ -239,6 +242,7 @@
 				case 'danmu':
 					that.blessingState = 'off';
 					_title = '给恒洁2021的寄语'
+					// that.getWXCode();
 					break;
 				default:
 					_title = '恒洁-签到'
@@ -360,7 +364,7 @@
 							"method": "POST",
 							"data": {
 								"name": that.name,
-								"value": that.$store.state.audio,
+								"value": 'http://' + that.$store.state.audio,
 								"enterprise_id": that.enterprise_id,
 								"sub_type": that.sub_type
 							}
@@ -458,6 +462,55 @@
 				uni.pageScrollTo({
 					scrollTop: 0,
 					duration: 0
+				})
+			},
+			wxStartRecording() {
+				var that = this;
+				console.log("wx--StartRecording")
+				wx.ready(function() {
+					wx.startRecord();
+				});
+				that.isRecording = true;
+				that.Recordingbtn = "松开保存";
+			},
+			wxStopRecording() {
+				var that = this;
+				wx.ready(function() {
+					wx.stopRecord({
+						success: function(res) {
+							var localId = res.localId;
+							that.localId = localId;
+							console.log("localId:", localId)
+							// if (duration > 0) {
+							// 	/****tcVod***/
+							// 	that.blobToFile(Blob);
+							// 	/****tcVod***/
+
+
+							// } else {
+							// 	uni.showToast({
+							// 		title: `录音失败`,
+							// 		icon: 'none'
+							// 	});
+							// }
+						},
+						fail(err) {
+							console.log("wxStopRecording-fail:", err)
+						}
+					});
+				});
+				console.log("wx--StopRecording")
+				clearInterval(dbSwitch);
+				dbSwitch = null;
+				that.isRecording = false;
+				that.Recordingbtn = "长按发送您的祝福";
+			},
+			wxRecorderPlay() {
+				var that = this;
+				wx.ready(function() {
+					wx.playVoice({
+						localId: that.localId // 需要播放的音频的本地ID，由stopRecord接口获得
+					});
 				})
 			},
 			startRecording() {
@@ -716,6 +769,91 @@
 					Symbian: u.indexOf('Symbian') > -1,
 					ucSB: u.indexOf('Firofox/1.') > -1,
 				};
+			},
+			getWXCode() {
+				const that = this;
+				let code = that.queryString('code');
+				if (code) {
+					that.getWXTicket();
+				} else {
+					let redirect_uri = 'http://sign.bdmartech.com/';
+					let REDIRECT_URI = encodeURIComponent(redirect_uri), //授权后重定向的回调链接地址， 请使用 urlEncode 对链接进行处理
+						scope = "snsapi_userinfo", //snsapi_base，snsapi_userinfo （弹出授权页面，获取更多信息）
+						state = "STATE"; //重定向后会带上state参数，开发者可以填写a-zA-Z0-9的参数值，最多128字节
+					var _url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx11eb371cd85adfd4&redirect_uri=' +
+						REDIRECT_URI +
+						'&response_type=code&scope=' + scope + '&state=' + state + '#wechat_redirect';
+					console.log("getWXCode：：：：：", _url)
+					window.location.href = _url;
+				}
+			},
+			getWXTicket() {
+				const that = this;
+				let channel_code = that.queryString('code');
+				var getTicketUrl = "http://sign.bdmartech.com/#/";
+				if (that.isIOS()) {
+					getTicketUrl = "http://sign.bdmartech.com/";
+				}
+				let _data = {
+					"intUrl": 'apiurlmt',
+					"inter": 'getJsApiTicket',
+					'parm': "?url=" + getTicketUrl,
+					'header': {
+						"channel_code": channel_code
+					}
+				};
+				_data["fun"] = function(ress) {
+					console.log("=======getTicket======")
+					console.log(ress)
+					if (ress.success) {
+						let res = ress.data;
+						uni.setStorage({
+							key: 'wx_ticket',
+							data: {
+								"access_token": res.access_token,
+								"jsapi_ticket": res.ticket,
+								"noncestr": res.noncestr,
+								"signature": res.signature,
+								"expires_in": res.expires_in,
+								timestamp: res.timestamp,
+							},
+							success: function() {}
+						});
+						var _config = {
+							debug: false,
+							appId: 'wx11eb371cd85adfd4',
+							timestamp: res.timestamp,
+							nonceStr: res.noncestr,
+							signature: res.signature,
+							jsApiList: [
+								'onMenuShareAppMessage',
+								'startRecord',
+								'stopRecord',
+								'onVoiceRecordEnd',
+								'playVoice',
+								'pauseVoice',
+								'stopVoice',
+								'onVoicePlayEnd',
+								'uploadVoice'
+							]
+						}
+						wx.config(_config);
+					}
+				}
+				that.$store.dispatch("getData", _data)
+			},
+			queryString(value) {
+				const reg = new RegExp(`(^|&)${value}=([^&]*)(&|$)`, 'i')
+				const r = window && window.location.search.substr(1).match(reg)
+				if (r != null) {
+					return unescape(r[2])
+				}
+				return null
+			},
+			isIOS() {
+				var isIphone = navigator.userAgent.includes('iPhone');
+				var isIpad = navigator.userAgent.includes('iPad');
+				return isIphone || isIpad;
 			},
 		}
 	}

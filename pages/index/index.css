@@ -29,6 +29,12 @@ page {
 	margin: 100upx auto 50upx;
 }
 
+#Title {
+	width: 100%;
+	display: block;
+	margin: 50upx auto;
+}
+
 .send-box {
 	z-index: 3;
 	height: 100%;
@@ -508,7 +514,7 @@ uni-swiper-item {
 
 .active-main {
 	width: 100%;
-	padding-top: 900rpx;
+	padding-top: 50rpx;
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
@@ -717,10 +723,12 @@ uni-swiper-item {
 	line-height: 2;
 	padding: 20rpx 10rpx;
 }
-.txts{
+
+.txts {
 	font-size: 36rpx;
 	text-shadow: 4rpx 4rpx 20rpx #333;
 }
+
 .row-column {
 	display: flex;
 	flex-direction: column;

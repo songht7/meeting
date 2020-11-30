@@ -228,7 +228,7 @@
 				},
 				brow: "",
 				redirect_uri: 'http://sign.bdmartech.com', //
-				wxsdk: false //是否微信SDK false、true
+				wxsdk: true //是否微信SDK false、true
 			}
 		},
 		onLoad(option) {
@@ -514,11 +514,9 @@
 			},
 			wxRecorderPlay() {
 				var that = this;
-				jweixin.ready(function() {
-					jweixin.playVoice({
-						localId: that.localId // 需要播放的音频的本地ID，由stopRecord接口获得
-					});
-				})
+				jweixin.playVoice({
+					localId: that.localId // 需要播放的音频的本地ID，由stopRecord接口获得
+				});
 			},
 			uploadWXRec() {
 				var that = this;

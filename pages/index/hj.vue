@@ -228,7 +228,7 @@
 				},
 				brow: "",
 				redirect_uri: 'http://sign.bdmartech.com', //
-				wxsdk: true //是否微信SDK false、true
+				wxsdk: false //是否微信SDK false、true
 			}
 		},
 		onLoad(option) {
